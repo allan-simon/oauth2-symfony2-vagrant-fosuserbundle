@@ -134,6 +134,10 @@ more instruction in the [official documentation](http://symfony.com/doc/current/
 
 #Resource
 
+## Oauth2
+
+ * [Tutorial I've followed to get the basic server working](http://blog.tankist.de/blog/2013/07/17/oauth2-explained-part-2-setting-up-oauth2-with-symfony2-using-fosoauthserverbundle/)
+
 ## Symfony / Doctrine
 
   * [The official documentation](http://symfony.com/doc/current/book/index.html)
