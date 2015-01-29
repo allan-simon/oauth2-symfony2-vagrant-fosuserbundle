@@ -4,3 +4,7 @@ bin/
 app/logs
 app/cache
 .vagrant/
+symfony.phar
+app/bootstrap.php.cache
+web/bundles/
+web/uploads/
