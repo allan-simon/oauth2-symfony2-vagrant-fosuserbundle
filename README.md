@@ -82,7 +82,13 @@ and you should get back
 
 ## Use refresh token
 
-TODO
+Once your `access token` is expired you can use the refresh token to get a new access token and new refresh token
+
+```
+ http://127.0.0.1:8089/app_dev.php/oauth/v2/token?client_id=CLIENT_ID&client_secret=CLIENT_SECRET&grant_type=refresh_token&refresh_token=PREVIOUS_REFRESH_TOKEN
+```
+
+Note: a refresh token can only be used once
 
 # Basic Development tasks
 
