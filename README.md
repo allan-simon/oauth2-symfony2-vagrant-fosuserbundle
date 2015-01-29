@@ -144,6 +144,7 @@ more instruction in the [official documentation](http://symfony.com/doc/current/
 
  * [Tutorial I've followed to get the basic server working](http://blog.tankist.de/blog/2013/07/17/oauth2-explained-part-2-setting-up-oauth2-with-symfony2-using-fosoauthserverbundle/)
  * [Tutorial that I've used to have the Oauth2 server works with FOSUserBundle](http://stackoverflow.com/questions/21390844/fosoauthserverbundle-with-fosuserbundle-how-to-make-it-works)
+ * [More information on making it work with FOSUserBundle](http://blog.logicexception.com/2012/04/securing-syfmony2-rest-service-wiith.html)
 
 ## Symfony / Doctrine
 
