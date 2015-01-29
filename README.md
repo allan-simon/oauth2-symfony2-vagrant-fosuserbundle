@@ -1,0 +1,139 @@
+# Oauth2 server (Vagrant + apache2 + posgresql + php-fpm + symfony)
+
+Please read and check this Readme from times to times so that
+to not waste time later wondering how to do things which are
+already explained here
+
+if something is wrong or missing: tell me, if you don't tell me
+I have no way to improve it =)
+
+  * we use `vagrant` to create the dev environnement
+  * `apache2` to provide the web server
+  * `postgresql` for the database
+  * `php-fpm` as the php interpreter
+  * `symfony` + `doctrine` for the base Framework
+  * `DoctrineMigration` to create database migration (should be simpler than Phinx)
+  * `FOSOAuthServerBundle` to provide the Oauth2 endpoint
+  * `FOSUserBundle` to provide user authentication
+
+
+for windows user you can have a nfs using this plugin
+
+```
+vagrant plugin install vagrant-winnfsd
+```
+
+# Create the vagrant machine
+
+```
+vagrant up
+```
+
+# Usage
+
+## Initiate database
+
+
+in the vagrant machine (in directory `/vagrant` ) run:
+
+```
+php app/console  doctrine:migrations:migrate
+```
+
+## Create a client
+
+in the vagrant machine (in directory `/vagrant` ) run: (in case you want to use the grant type `password`)
+
+```
+php app/console acme:oauth-server:client:create --grant-type="password" --grant-type="refresh_token" --grant-type="token"
+```
+
+it will return you:
+
+```
+Added a new client with public id CLIENT_ID, secret CLIENT_SECRET
+```
+
+## Create a new end user
+
+```
+php app/console fos:user:create vagrant vagrant@vagrant.com vagrant
+```
+
+## Get an authorization token with grant type *password*
+
+run this HTTP request
+
+```
+http://127.0.0.1:8089/app_dev.php/oauth/v2/token?client_id=CLIENT_ID&client_secret=CLIENT_SECRET&grant_type=password&username=vagrant&password=vagrant
+```
+
+and you should get back
+
+```
+{
+    "access_token":"NTdkNGI3YjE1MmY1MjExMzVkMmUwM2Q4OTQ4NWMwOGM0YTYzNjI1NGZlM2I3ZGU2ZTE2NWQ4N2UyYTZiYmY4ZA",
+    "expires_in":3600,
+    "token_type":"bearer",
+    "scope":"user",
+    "refresh_token":"NGY3ZTJhYjhmMmRjM2YyZDlmZGI4Mzk2MmY5OGMzMjZmZmY1OWFmNTkyYWFlZDg5YWZlZjA2MDU2YzNjYmU2Mw"
+}
+```
+
+## Use refresh token
+
+TODO
+
+# Basic Development tasks
+
+### Commit code
+
+commiting code will run automatically php-codesniffer to check
+that your code is well written
+
+for common mistakes (extra spaces etc.), there is the command
+
+```
+bin/php-cs-fixer  fix src  -v
+```
+
+to fix them for you (don't forget to `git add` again after you've run this command)
+
+### Creating a new Bundle
+
+A middle sized project is supposed to be made of several bundles
+if not, you're certainly doing something wrong (too much coupling etc.)
+
+```
+php app/console generate:bundle --namespace=%PROJECT_NAME%/Bundle/%XXX%Bundle --no-interaction --format=yml
+```
+
+replace `%PROJECT_NAME%` and `%XXX%` by the project name and the name of the feature
+your bundle is covering for example
+
+```
+php app/console generate:bundle --namespace=WeBridge/Bundle/VideoBundle --no-interaction --format=yml
+```
+
+once it's done don't forget to replace the `<?php` in the controller by a `<?hh` so that you can leverage
+the Hack language
+
+### Creating a Database Migration
+
+If you want to add/delete/edit a Table or a column:
+
+For simply create/modify your Entity as normal, and when you're done run
+
+```
+php app/console doctrine:migrations:diff
+php app/console doctrine:migrations:migrate
+```
+
+more instruction in the [official documentation](http://symfony.com/doc/current/bundles/DoctrineMigrationsBundle/index.html#generating-migrations-automatically)
+
+
+#Resource
+
+## Symfony / Doctrine
+
+  * [The official documentation](http://symfony.com/doc/current/book/index.html)
