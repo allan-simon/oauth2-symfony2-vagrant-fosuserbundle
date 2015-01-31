@@ -90,6 +90,25 @@ Once your `access token` is expired you can use the refresh token to get a new a
 
 Note: a refresh token can only be used once
 
+
+## (not part of oauth2 standard) check if a token is valid
+
+In case you have a microservice architecture and you want a service you own to be able to check
+on the Oauth2 server if an access token is valid you can use this call `/oauth/access_token_valid/{accessToken}`
+
+for example:
+
+```
+http://127.0.0.1:8089/app_dev.php/oauth/access_token_valid/NTdkNGI3YjE1MmY1MjExMzVkMmUwM2Q4OTQ4NWMwOGM0YTYzNjI1NGZlM2I3ZGU2ZTE2NWQ4N2UyYTZiYmY4ZA
+```
+
+it will return
+
+  * HTTP status code 200 if the token is valid
+  * HTTP status code 410 (resource gone) if not
+
+for the moment the body of these reponse for this call is purely for debugging purpose
+
 # Basic Development tasks
 
 ### Commit code

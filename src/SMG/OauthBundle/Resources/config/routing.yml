@@ -13,3 +13,7 @@ smg_oauth_server_auth_login_check:
     pattern:  /oauth/v2/auth_login_check
     defaults: { _controller: SMGOauthBundle:Security:loginCheck }
 
+smg_oauth_server_access_token_check:
+    pattern:  /oauth/access_token_valid/{accessToken}
+    defaults: { _controller: SMGOauthBundle:Security:accessTokenValid }
+
