@@ -43,6 +43,7 @@ class UsersController extends FOSRestController
         $newUser->setPlainPassword($user->getPlainPassword());
         $newUser->setRoles(array('ROLE_USER'));
         $newUser->setEnabled(false);
+        $newUser->setLocked(true);
         $newUser->setActivationCode("123456");
         $manager->updateUser($newUser);
 
@@ -55,11 +56,31 @@ class UsersController extends FOSRestController
     }
 
 
-    public function putUserAction($id)
+    /**
+     * @Annotations\Put("/users/{id}/activation-code/{activationCode}")
+     */
+    public function putUserActivationCodeAction($id, $activationCode)
     {
+
+        $manager = $this->get('fos_user.user_manager');
+        $user = $manager->findUserBy(
+            array(
+                "id" => $id,
+                "activationCode" => $activationCode,
+            )
+        );
+        if (is_null($user)) {
+            throw $this->createNotFoundException("No such user, or activation code invalid");
+        }
+
+        $user->setEnabled(true);
+        $user->setLocked(false);
+        $manager->updateUser($user);
+
         return $this->handleView(
             new View(
-                array("id" => $id),
+                //TODO maybe replace by something more informative
+                array(),
                 Response::HTTP_CREATED
             )
         );

@@ -89,6 +89,14 @@ Transfer-Encoding: chunked
 }
 ```
 
+once it's done you then need to activate the user with this API call
+
+```
+http PUT http://127.0.0.1:8089/app_dev.php/users/{id}/activation-code/{activationCode}
+```
+
+if the user is correctly activate you will receive a `201 Created` status code
+
 
 ## Get an authorization token with grant type *password*
 
