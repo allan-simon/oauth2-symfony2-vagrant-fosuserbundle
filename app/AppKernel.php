@@ -19,7 +19,10 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new FOS\OAuthServerBundle\FOSOAuthServerBundle(),
             new FOS\UserBundle\FOSUserBundle(),
+            new FOS\RestBundle\FOSRestBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
             new SMG\OauthBundle\SMGOauthBundle(),
+            new SMG\UserBundle\SMGUserBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

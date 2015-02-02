@@ -4,3 +4,6 @@ smg_oauth:
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+users:
+    resource: "@SMGUserBundle/Resources/config/routing.yml"

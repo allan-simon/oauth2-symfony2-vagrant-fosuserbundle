@@ -56,9 +56,39 @@ Added a new client with public id CLIENT_ID, secret CLIENT_SECRET
 
 ## Create a new end user
 
+### Through the console
 ```
 php app/console fos:user:create vagrant vagrant@vagrant.com vagrant
 ```
+
+### Through an API call
+
+
+```
+echo '
+{
+    "email": "TEST@EXAMPLE.COM" ,
+    "username" : "USER_NAME",
+    "plain_password" : "PLAIN_TEXT_PASSWORD"
+}
+' |  http POST http://127.0.0.1:8089/app_dev.php/users
+```
+
+if everything is made correctly you should get back this
+
+```
+HTTP/1.1 202 Accepted
+Cache-Control: no-cache
+Content-Type: application/json
+Date: XXX
+Server: XXXX
+Transfer-Encoding: chunked
+
+{
+    "id": 42
+}
+```
+
 
 ## Get an authorization token with grant type *password*
 

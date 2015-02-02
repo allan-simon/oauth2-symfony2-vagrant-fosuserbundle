@@ -25,6 +25,10 @@ framework:
     fragments:       ~
     http_method_override: true
 
+    serializer:
+        enabled: true
+
+
 # Twig Configuration
 twig:
     debug:            "%kernel.debug%"
@@ -86,4 +90,17 @@ fos_oauth_server:
 fos_user:
     db_driver: orm 
     firewall_name: main
-    user_class: SMG\OauthBundle\Entity\User
+    user_class: SMG\UserBundle\Entity\User
+
+fos_rest:
+    routing_loader:
+        default_format: json
+    body_converter:
+        enabled: true
+
+jms_serializer:
+    metadata:
+        directories:
+            FOSUserBundle:
+                path: '%kernel.root_dir%/Resources/FOSUserBundle/serializer'
+                namespace_prefix: 'FOS\UserBundle'
