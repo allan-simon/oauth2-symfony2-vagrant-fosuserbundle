@@ -35,6 +35,7 @@ class UsersController extends FOSRestController
 
 
         $manager = $this->get('fos_user.user_manager');
+        $generator = $this->get('fos_user.util.token_generator');
         // we need to create a new user to get the salt
         $newUser = $manager->createUser();
 
@@ -42,14 +43,18 @@ class UsersController extends FOSRestController
         $newUser->setEmail($user->getEmail());
         $newUser->setPlainPassword($user->getPlainPassword());
         $newUser->setRoles(array('ROLE_USER'));
+// TODO: #1 when we will have implemented the email sending
+//      $newUser->setConfirmationToken($generator->generateToken());
+        $newUser->setConfirmationToken("123456");
         $newUser->setEnabled(false);
         $newUser->setLocked(true);
-        $newUser->setActivationCode("123456");
         $manager->updateUser($newUser);
 
         return $this->handleView(
             new View(
-                array("id" => $newUser->getId()),
+                array(
+                    "id" => $newUser->getId(),
+                ),
                 Response::HTTP_ACCEPTED
             )
         );
@@ -57,20 +62,20 @@ class UsersController extends FOSRestController
 
 
     /**
-     * @Annotations\Put("/users/{id}/activation-code/{activationCode}")
+     * @Annotations\Put("/users/{id}/confirmation-token/{confirmationToken}")
      */
-    public function putUserActivationCodeAction($id, $activationCode)
+    public function putUserActivationCodeAction($id, $confirmationToken)
     {
 
         $manager = $this->get('fos_user.user_manager');
         $user = $manager->findUserBy(
             array(
                 "id" => $id,
-                "activationCode" => $activationCode,
+                "confirmationToken" => $confirmationToken,
             )
         );
         if (is_null($user)) {
-            throw $this->createNotFoundException("No such user, or activation code invalid");
+            throw $this->createNotFoundException("No such user, or confirmation token invalid");
         }
 
         $user->setEnabled(true);

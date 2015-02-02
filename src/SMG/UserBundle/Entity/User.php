@@ -5,13 +5,15 @@ namespace SMG\UserBundle\Entity;
 use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+
 /**
 * SMG\UserBundle\Entity\User
 *
 * @ORM\Entity
 * @ORM\Table(name="oauth_users")
 */
-class User extends BaseUser
+class User extends BaseUser implements AdvancedUserInterface
 {
     /**
     * @ORM\Column(type="integer")
@@ -19,13 +21,6 @@ class User extends BaseUser
     * @ORM\GeneratedValue(strategy="AUTO")
     */
     protected $id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", nullable=true)
-     */
-    protected $activationCode = null;
 
     public function __construct()
     {
@@ -37,15 +32,23 @@ class User extends BaseUser
         return $this->id;
     }
 
-    public function getActivationCode()
+    public function isAccountNonExpired()
     {
-        return $activationCode;
+        return true;
     }
 
-    public function setActivationCode($activationCode)
+    public function isAccountNonLocked()
     {
-        $this->activationCode = $activationCode;
+        return !$this->getLocked();
+    }
 
-        return $this;
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled()
+    {
+        return $this->getEnabled();
     }
 }
