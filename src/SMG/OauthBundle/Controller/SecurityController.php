@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class SecurityController extends Controller
 {
@@ -16,31 +17,40 @@ class SecurityController extends Controller
      * HTTP status 200 => valid
      * HTTP status 410 (gone) => not valid
      *
-     * @param Request $request     wrap http headers etc.
-     * @param string  $accessToken access token to check the validity of
+     * @param Request $request           wrap http headers etc.
+     * @param string  $accessTokenString access token to check the validity of
      *
+     * @return Response
      */
     public function accessTokenValidAction(
         Request $request,
-        $accessToken
+        $accessTokenString
     ) {
-        $response = new Response();
 
         try {
             $server = $this->get('fos_oauth_server.server');
             $accessToken = $server->verifyAccessToken(
-                $accessToken,
+                $accessTokenString,
                 'user'
             );
-            $response->setStatusCode(Response::HTTP_OK);
-            $response->setContent("valid access token");
+            $user = $accessToken->getUser();
+            //TODO: replace by a serializer maybe?
+            return new JsonResponse(
+                [
+                    'id' => $user->getId(),
+                    'email' => $user->getEmail(),
+                    'username' => $user->getUsername(),
+                    'roles' => $user->getRoles(),
+                ]
+            );
 
         } catch (OAuth2AuthenticateException $e) {
+            $response = new Response();
             $response->setStatusCode(Response::HTTP_GONE);
             $response->setContent('Invalid or expired token');
+            return $response;
         }
 
-        return $response;
     }
 }
 

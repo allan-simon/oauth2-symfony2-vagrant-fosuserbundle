@@ -142,10 +142,23 @@ http://127.0.0.1:8089/app_dev.php/oauth/access_token_valid/NTdkNGI3YjE1MmY1MjExM
 
 it will return
 
-  * HTTP status code 200 if the token is valid
-  * HTTP status code 410 (resource gone) if not
+  * HTTP status code 200 if the token is valid with the user's information in a Json in body
+  * HTTP status code 410 (resource gone) if not. The body is purely for debugging for the moment
 
-for the moment the body of these reponse for this call is purely for debugging purpose
+example of successful request
+
+```
+{
+    "email": "vagrant@vagrant.com",
+    "id": 1,
+    "roles": [
+        "ROLE_USER"
+    ],
+    "username": "vagrant"
+}
+
+```
+
 
 # Basic Development tasks
 

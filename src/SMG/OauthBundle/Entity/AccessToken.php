@@ -27,4 +27,14 @@ class AccessToken extends BaseAccessToken
      * @ORM\ManyToOne(targetEntity="SMG\UserBundle\Entity\User")
      */
     protected $user;
+
+    /**
+     * Return user identified by the token
+     *
+     * @return SMG\UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }
