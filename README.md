@@ -74,6 +74,31 @@ echo '
 ' |  http POST http://127.0.0.1:8089/app_dev.php/users
 ```
 
+or
+
+```
+echo '
+{
+    "phone_number": "1234567" ,
+    "username" : "USER_NAME",
+    "plain_password" : "PLAIN_TEXT_PASSWORD"
+}
+' |  http POST http://127.0.0.1:8089/app_dev.php/users
+```
+
+or
+
+```
+echo '
+{
+    "email": "TEST@EXAMPLE.COM" ,
+    "phone_number": "1234567" ,
+    "username" : "USER_NAME",
+    "plain_password" : "PLAIN_TEXT_PASSWORD"
+}
+' |  http POST http://127.0.0.1:8089/app_dev.php/users
+```
+
 if everything is made correctly you should get back this
 
 ```

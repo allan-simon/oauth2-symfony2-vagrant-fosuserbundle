@@ -22,6 +22,12 @@ class User extends BaseUser implements AdvancedUserInterface
     */
     protected $id;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $phoneNumber = null;
+
+
     public function __construct()
     {
         parent::__construct();
@@ -30,6 +36,17 @@ class User extends BaseUser implements AdvancedUserInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getPhoneNumber()
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber($phoneNumber)
+    {
+        $this->phoneNumber = $phoneNumber;
+        return $this;
     }
 
     public function isAccountNonExpired()

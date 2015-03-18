@@ -21,9 +21,7 @@ class UsersController extends FOSRestController
         $validator = $this->container->get('validator');
         $errors = $validator->validate(
             $user,
-            // Profile for validation of FOSUserBundle 
-            // Default for own custom ones
-            array('Profile', 'Default')
+            array('mobile_app_registration')
         );
 
 
@@ -33,14 +31,25 @@ class UsersController extends FOSRestController
             );
         }
 
-
         $manager = $this->get('fos_user.user_manager');
         $generator = $this->get('fos_user.util.token_generator');
         // we need to create a new user to get the salt
         $newUser = $manager->createUser();
 
+        $phoneNumber = $user->getPhoneNumber();
+
+        // normalize phone number with international suffix
+        if (!is_null($phoneNumber)) {
+            $phoneNumber = str_replace('+', '00', $phoneNumber);
+        }
+
+        //TODO find a better way to have nullable email
+        //     i.e for the moment we're setting it to empty string
+        $email = (string) $user->getEmail();
+
         $newUser->setUsername($user->getUsername());
-        $newUser->setEmail($user->getEmail());
+        $newUser->setPhoneNumber($phoneNumber);
+        $newUser->setEmail($email);
         $newUser->setPlainPassword($user->getPlainPassword());
         $newUser->setRoles(array('ROLE_USER'));
 // TODO: #1 when we will have implemented the email sending

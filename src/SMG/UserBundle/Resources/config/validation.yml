@@ -1,0 +1,50 @@
+SMG\UserBundle\Entity\User:
+    constraints:
+        - Expression:
+            expression: "this.getEmail() != '' or this.getPhoneNumber() != ''"
+            message: bst.phone_and_email.missing
+            groups: ['mobile_app_registration']
+    properties:
+        email:
+            - Length:
+                min: 5
+                minMessage: fos_user.email.short
+                max: 255
+                maxMessage: fos_user.email.long
+                groups: ['mobile_app_registration']
+        username:
+            - Length:
+                min: 6
+                minMessage: fos_user.username.short
+                max: 255
+                maxMessage: fos_user.username.long
+                groups: ['mobile_app_registration']
+            - NotBlank:
+                message: fos_user.username.blank
+                groups: ['mobile_app_registration']
+        phoneNumber:
+            - Length:
+                min: 3
+                minMessage: bst.phonenumber.short
+                max: 20
+                maxMessage: bst.phonenumber.long
+                groups: ['mobile_app_registration']
+            - Regex:
+                pattern: '/\s/'
+                match:   false
+                message: bst.phonenumber.space
+                groups: ['mobile_app_registration']
+            - Regex:
+                pattern: '/^\+?\d+$/'
+                match:   true
+                message: bst.phonenumber.format
+                groups: ['mobile_app_registration']
+        plainPassword:
+            - NotBlank:
+                message: fos_user.password.blank
+                groups: ['mobile_app_registration']
+            - Length:
+                min: 2
+                max: 4096
+                minMessage: fos_user.password.short
+                groups: ['mobile_app_registration']
