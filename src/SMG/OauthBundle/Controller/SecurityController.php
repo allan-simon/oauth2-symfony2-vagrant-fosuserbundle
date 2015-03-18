@@ -39,6 +39,7 @@ class SecurityController extends Controller
                 [
                     'id' => $user->getId(),
                     'email' => $user->getEmail(),
+                    'phone_number' => $user->getPhoneNumber(),
                     'username' => $user->getUsername(),
                     'roles' => $user->getRoles(),
                 ]

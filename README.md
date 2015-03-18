@@ -174,8 +174,9 @@ example of successful request
 
 ```
 {
-    "email": "vagrant@vagrant.com",
     "id": 1,
+    "email": "vagrant@vagrant.com",
+    "phone_number": "0545454",
     "roles": [
         "ROLE_USER"
     ],
