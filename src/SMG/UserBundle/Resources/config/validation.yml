@@ -38,7 +38,7 @@ SMG\UserBundle\Entity\User:
                 pattern: '/^\+?\d+$/'
                 match:   true
                 message: bst.phonenumber.format
-                groups: ['mobile_app_registration']
+                groups: ['mobile_app_registration', 'phone_check']
         plainPassword:
             - NotBlank:
                 message: fos_user.password.blank

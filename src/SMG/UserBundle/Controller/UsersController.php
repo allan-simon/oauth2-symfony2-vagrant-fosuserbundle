@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\View\View;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use SMG\UserBundle\Entity\User;
 
@@ -84,7 +85,7 @@ class UsersController extends FOSRestController
         ) {
             return $this->handleView(
                 new View(
-                    ['message' => 'new_password or old_password missing'],
+                    ['message' => 'bst.changepassword.parameter_missing'],
                     Response::HTTP_BAD_REQUEST
                 )
             );
@@ -101,7 +102,7 @@ class UsersController extends FOSRestController
         if ($encodedPass !== $user->getPassword()) {
             return $this->handleView(
                 new View(
-                    ['message' => 'wrong password'],
+                    ['message' => 'bst.password.wrong'],
                     Response::HTTP_BAD_REQUEST
                 )
             );
@@ -112,6 +113,60 @@ class UsersController extends FOSRestController
 
         //TODO maybe replace by something more informative
         return $this->handleView(new View());
+    }
+
+    /**
+     * Change user's email or phone
+     *
+     * @Annotations\Patch("/users/{id}/contact-info")
+     */
+    public function patchUserContactInfodAction(User $user, Request $request)
+    {
+        $requestData = json_decode($request->getContent(), true);
+        if (empty($requestData['new_contact_info'])) {
+            return $this->handleView(
+                new View(
+                    ['message' => 'new_contact_info field missing'],
+                    Response::HTTP_BAD_REQUEST
+                )
+            );
+        }
+        $contactInfo = $requestData['new_contact_info'];
+
+        $manager = $this->get('fos_user.user_manager');
+        $validator = $this->container->get('validator');
+
+        $emailAssert = new Assert\Email();
+        $emailAssert->message = 'bst.email.invalid';
+
+        $errors = $validator->validateValue($contactInfo, $emailAssert);
+        if (count($errors) === 0) {
+            $user->setEmail($contactInfo);
+            $user->setConfirmationToken("123456");
+            //TODO send email
+            $manager->updateUser($user);
+            return $this->handleView(new View());
+        }
+
+        // we set user directly here so we can reuse the validator
+        // of User entity for phone number
+        $phoneNumber = str_replace('+', '00', $contactInfo);
+        $user->setPhoneNumber($phoneNumber);
+
+        $errors = $validator->validate($user, ['phone_check']);
+        if (count($errors) === 0) {
+            $user->setConfirmationToken("123456");
+            //TODO send SMS
+            $manager->updateUser($user);
+            return $this->handleView(new View());
+        }
+
+        return $this->handleView(
+            new View(
+                ['message' => 'bst.changecontactinfo.invalid'],
+                Response::HTTP_BAD_REQUEST
+            )
+        );
     }
 
     /**
