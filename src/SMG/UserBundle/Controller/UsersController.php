@@ -2,6 +2,7 @@
 
 namespace SMG\UserBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -69,6 +70,49 @@ class UsersController extends FOSRestController
         );
     }
 
+    /**
+     * Change user password
+     *
+     * @Annotations\Patch("/users/{id}/password")
+     */
+    public function patchUserPasswordAction(User $user, Request $request)
+    {
+        $requestData = json_decode($request->getContent(), true);
+        if (
+            empty($requestData['new_password']) ||
+            empty($requestData['old_password'])
+        ) {
+            return $this->handleView(
+                new View(
+                    ['message' => 'new_password or old_password missing'],
+                    Response::HTTP_BAD_REQUEST
+                )
+            );
+        }
+        $manager = $this->get('fos_user.user_manager');
+
+        $encoderService = $this->get('security.encoder_factory');
+        $encoder = $encoderService->getEncoder($user);
+        $encodedPass = $encoder->encodePassword(
+            $requestData['old_password'],
+            $user->getSalt()
+        );
+
+        if ($encodedPass !== $user->getPassword()) {
+            return $this->handleView(
+                new View(
+                    ['message' => 'wrong password'],
+                    Response::HTTP_BAD_REQUEST
+                )
+            );
+        }
+
+        $user->setPlainPassword($requestData['new_password']);
+        $manager->updateUser($user);
+
+        //TODO maybe replace by something more informative
+        return $this->handleView(new View());
+    }
 
     /**
      * @Annotations\Put("/users/{id}/confirmation-token/{confirmationToken}")

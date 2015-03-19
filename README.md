@@ -185,6 +185,17 @@ example of successful request
 
 ```
 
+## Change password
+
+```
+echo '
+{
+    "new_password" : "NEW_PASSWORD",
+    "old_password" : "PLAIN_TEXT_PASSWORD"
+}
+' |  http PATCH http://127.0.0.1:8089/app_dev.php/users/{id}/password
+
+```
 
 # Basic Development tasks
 
