@@ -55,7 +55,7 @@ class User extends BaseUser implements AdvancedUserInterface
 
     public function isAccountNonLocked()
     {
-        return !$this->getLocked();
+        return !$this->isLocked();
     }
 
     public function isCredentialsNonExpired()
