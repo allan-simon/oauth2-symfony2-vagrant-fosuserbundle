@@ -9,7 +9,6 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\View\View;
 use Symfony\Component\Validator\Constraints as Assert;
-
 use SMG\UserBundle\Entity\User;
 
 class UsersController extends FOSRestController
