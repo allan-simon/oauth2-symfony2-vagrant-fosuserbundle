@@ -12,8 +12,8 @@ addons:
 before_script:
 - composer self-update
 - composer install --prefer-source
-- psql -c 'create user vagrant with password vagrant;' -U postgres
-- psql -c 'create database symfony with owner vagrant;' -U postgres
+- psql -c 'create user vagrant with password "vagrant";' -U postgres
+- psql -c 'create database symfony with owner "vagrant";' -U postgres
 - php app/console doctrine:migrations:migrate
 
 script: phpunit -c app
