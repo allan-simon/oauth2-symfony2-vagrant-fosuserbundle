@@ -3,6 +3,13 @@ namespace SMG\UserBundle\Tests;
 
 trait TestHelpersTrait
 {
+
+    private $client;
+    private $em;
+    private $currentUser;
+    private $fixtures;
+    private $response;
+
     protected function performClientRequest(
         $method,
         $urlPath,
