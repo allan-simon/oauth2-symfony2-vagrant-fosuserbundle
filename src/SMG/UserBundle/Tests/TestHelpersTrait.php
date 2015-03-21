@@ -42,7 +42,7 @@ trait TestHelpersTrait
     protected function assertJsonResponse(
         $response,
         $statusCode = 200,
-        $checkValidJson =  true,
+        $checkValidJson = true,
         $contentType = 'application/json'
     ) {
         $this->assertEquals(
@@ -58,7 +58,7 @@ trait TestHelpersTrait
             $decode = json_decode($response->getContent());
             $this->assertTrue(
                 ($decode !== null && $decode !== false),
-                'is response valid json: [' . $response->getContent() . ']'
+                'is response valid json: ['.$response->getContent().']'
             );
         }
     }
