@@ -53,18 +53,9 @@ class User extends BaseUser implements AdvancedUserInterface
         return true;
     }
 
-    public function isAccountNonLocked()
-    {
-        return !$this->isLocked();
-    }
-
     public function isCredentialsNonExpired()
     {
         return true;
     }
 
-    public function isEnabled()
-    {
-        return $this->getEnabled();
-    }
 }
