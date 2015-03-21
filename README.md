@@ -1,5 +1,7 @@
 # Oauth2 server (Vagrant + apache2 + posgresql + php-fpm + symfony)
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/allan-simon/oauth2-symfony2-vagrant-fosuserbundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/allan-simon/oauth2-symfony2-vagrant-fosuserbundle/?branch=master)
+
 Please read and check this Readme from times to times so that
 to not waste time later wondering how to do things which are
 already explained here
