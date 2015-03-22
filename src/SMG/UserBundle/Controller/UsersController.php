@@ -265,23 +265,17 @@ class UsersController extends FOSRestController
     /**
      * @Annotations\Put("/users/{id}/confirmation-token/{confirmationToken}")
      */
-    public function putUserActivationCodeAction($id, $confirmationToken)
+    public function putUserActivationCodeAction(User $user, $confirmationToken)
     {
 
-        $manager = $this->get('fos_user.user_manager');
-        $user = $manager->findUserBy(
-            array(
-                "id" => $id,
-                "confirmationToken" => $confirmationToken,
-            )
-        );
-        if (is_null($user)) {
-            throw $this->createNotFoundException("No such user, or confirmation token invalid");
+        if ($user->getConfirmationToken() !== $confirmationToken) {
+            throw $this->createNotFoundException("No confirmation token invalid");
         }
 
         $user->setEnabled(true);
         $user->setLocked(false);
-        $manager->updateUser($user);
+
+        $manager = $this->get('fos_user.user_manager')->updateUser($user);
 
         return $this->handleView(
             new View(

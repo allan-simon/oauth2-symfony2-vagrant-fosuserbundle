@@ -247,6 +247,21 @@ class UsersControllerTest extends WebTestCase
         $this->assertBadRequestError();
     }
 
+    // tests PUT /users{}/confirmation-token/{}
+
+    public function testPutUserConfirmationTokenEnableUser()
+    {
+        $this->givenUser('new-user');
+        $this->performPutUserConfirmationCode();
+        $this->assertCreatedSuccess();
+    }
+
+    public function testPutUserBadConfirmationTokenNotFound()
+    {
+        $this->givenUser('new-user');
+        $this->performPutUserConfirmationCode('wrong_one');
+        $this->assertNotFoundError();
+    }
 
 
     // conveniency methods
@@ -259,6 +274,18 @@ class UsersControllerTest extends WebTestCase
             $userPayload
         );
     }
+
+    private function performPutUserConfirmationCode($confirmationToken = null)
+    {
+        if ($confirmationToken === null) {
+            $confirmationToken = $this->user->getConfirmationToken();
+        }
+        $this->response = $this->performClientRequest(
+            'PUT',
+            '/users/'.$this->user->getId().'/confirmation-token/'.$confirmationToken
+        );
+    }
+
 
     private function performPostUserForgotPassword(array $payload)
     {
