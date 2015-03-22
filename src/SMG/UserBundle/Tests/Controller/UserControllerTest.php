@@ -95,31 +95,38 @@ class UsersControllerTest extends WebTestCase
 
     private function performPostUser(array $userPayload)
     {
-        $jsonHeaders = ['CONTENT_TYPE' => 'application/json'];
-        $jsonBody = json_encode($userPayload);
-
-        $this->response = $this->performClientRequest(
+        $this->performJsonClientRequest(
             'POST',
             '/users',
-            $jsonHeaders,
-            $jsonBody
+            $userPayload
         );
     }
 
     private function performPatchUser($endpoint, array $userPayload)
     {
-        $jsonHeaders = ['CONTENT_TYPE' => 'application/json'];
-        $jsonBody = json_encode($userPayload);
-
-        $this->response = $this->performClientRequest(
+        $this->performJsonClientRequest(
             'PATCH',
             '/users/'.$this->user->getId().$endpoint,
-            $jsonHeaders,
-            $jsonBody
+            $userPayload
         );
     }
 
+    private function performJsonClientRequest(
+        $method,
+        $endpoint,
+        $payload
+    ) {
+        $jsonHeaders = ['CONTENT_TYPE' => 'application/json'];
+        $jsonBody = json_encode($payload);
 
+        $this->response = $this->performClientRequest(
+            $method,
+            $endpoint,
+            $jsonHeaders,
+            $jsonBody
+        );
+
+    }
 
     private function findUserByUsername($username)
     {
