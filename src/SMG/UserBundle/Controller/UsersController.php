@@ -352,7 +352,7 @@ class UsersController extends FOSRestController
 
         foreach ($keys as $key) {
             if (empty($json[$key])) {
-                throw new BadRequestHttpException($key. ' is missing');
+                throw new BadRequestHttpException($key.' is missing');
             }
         }
         return $json;
