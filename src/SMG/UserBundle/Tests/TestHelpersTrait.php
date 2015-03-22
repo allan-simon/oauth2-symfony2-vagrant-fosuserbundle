@@ -114,4 +114,15 @@ trait TestHelpersTrait
     {
         $this->assertJsonResponse($this->response, 202, false);
     }
+
+    abstract public function assertTrue($condition, $message = '');
+    abstract public function assertEquals(
+        $expected,
+        $actual,
+        $message = '',
+        $delta = 0.0,
+        $maxDepth = 10,
+        $canonicalize = false,
+        $ignoreCase = false
+    );
 }
