@@ -71,44 +71,25 @@ class UsersController extends FOSRestController
     }
 
     /**
-     * Change user password
-     *
      * @Annotations\Patch("/users/{id}/password")
      */
     public function patchUserPasswordAction(User $user, Request $request)
     {
-        $requestData = json_decode($request->getContent(), true);
-        if (
-            empty($requestData['new_password']) ||
-            empty($requestData['old_password'])
-        ) {
-            return $this->handleView(
-                new View(
-                    ['message' => 'bst.changepassword.parameter_missing'],
-                    Response::HTTP_BAD_REQUEST
-                )
-            );
-        }
-        $manager = $this->get('fos_user.user_manager');
-
-        $encoderService = $this->get('security.encoder_factory');
-        $encoder = $encoderService->getEncoder($user);
-        $encodedPass = $encoder->encodePassword(
-            $requestData['old_password'],
-            $user->getSalt()
+        $requestData = $this->requestIsJsonWithKeysOrThrow(
+            $request,
+            ['new_password', 'old_password']
         );
 
-        if ($encodedPass !== $user->getPassword()) {
+        if ($this->isPasswordCorrect($user, $requestData['old_password'])) {
             return $this->handleView(
                 new View(
                     ['message' => 'bst.password.wrong'],
-                    Response::HTTP_BAD_REQUEST
+                    Response::HTTP_FORBIDDEN
                 )
             );
         }
 
-        $user->setPlainPassword($requestData['new_password']);
-        $manager->updateUser($user);
+        $this->updateUserPassword($user, $requestData['new_password']);
 
         //TODO maybe replace by something more informative
         return $this->handleView(new View());
@@ -121,15 +102,11 @@ class UsersController extends FOSRestController
      */
     public function patchUserContactInfodAction(User $user, Request $request)
     {
-        $requestData = json_decode($request->getContent(), true);
-        if (empty($requestData['new_contact_info'])) {
-            return $this->handleView(
-                new View(
-                    ['message' => 'new_contact_info field missing'],
-                    Response::HTTP_BAD_REQUEST
-                )
-            );
-        }
+        $requestData = $this->requestIsJsonWithKeysOrThrow(
+            $request,
+            ['new_contact_info']
+        );
+
         $contactInfo = $requestData['new_contact_info'];
 
         $manager = $this->get('fos_user.user_manager');
@@ -198,5 +175,47 @@ class UsersController extends FOSRestController
         );
 
     } 
+
+    /**
+     * @return bool
+     */
+    private function isPasswordCorrect(User $user, $password)
+    {
+        $encoderService = $this->get('security.encoder_factory');
+        $encoder = $encoderService->getEncoder($user);
+        $encodedPass = $encoder->encodePassword(
+            $password,
+            $user->getSalt()
+        );
+
+        return $encodedPass !== $user->getPassword();
+    }
+
+    /**
+     * @return null
+     */
+    private function updateUserPassword(User $user, $newPassword)
+    {
+        $user->setPlainPassword($newPassword);
+        $manager = $this->get('fos_user.user_manager');
+        $manager->updateUser($user);
+    }
     
+    /**
+     * @return array
+     */
+    private function requestIsJsonWithKeysOrThrow(
+        Request $request,
+        array $keys,
+        $message = 'bst.json.field_missing'
+    ) {
+        $json = json_decode($request->getContent(), true);
+
+        foreach ($keys as $key) {
+            if (empty($json[$key])) {
+                throw new BadRequestHttpException();
+            }
+        }
+        return $json;
+    }
 }
