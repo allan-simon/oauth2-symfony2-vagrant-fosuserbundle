@@ -9,6 +9,7 @@ trait TestHelpersTrait
     private $currentUser;
     private $fixtures;
     private $response;
+    private $authAsUser;
 
     protected function performClientRequest(
         $method,
