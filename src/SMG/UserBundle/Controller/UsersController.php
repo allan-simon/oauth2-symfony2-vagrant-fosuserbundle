@@ -275,7 +275,7 @@ class UsersController extends FOSRestController
         $user->setEnabled(true);
         $user->setLocked(false);
 
-        $manager = $this->get('fos_user.user_manager')->updateUser($user);
+        $this->get('fos_user.user_manager')->updateUser($user);
 
         return $this->handleView(
             new View(
