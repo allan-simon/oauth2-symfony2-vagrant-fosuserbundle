@@ -351,8 +351,9 @@ class UsersControllerTest extends WebTestCase
     private function assertUserHasConfirmationTokenSet()
     {
         $this->em->refresh($this->user);
+        $token = $this->user->getConfirmationToken();
         $this->assertFalse(
-            empty($this->user->getConfirmationToken()),
+            empty($token),
             'confirmation token should not be empty'
         );
     }
@@ -360,8 +361,9 @@ class UsersControllerTest extends WebTestCase
     private function assertUserHasNoConfirmationTokenSet()
     {
         $this->em->refresh($this->user);
+        $token = $this->user->getConfirmationToken();
         $this->assertTrue(
-            empty($this->user->getConfirmationToken()),
+            empty($token),
             'confirmation token should be empty'
         );
     }
