@@ -199,6 +199,56 @@ class UsersControllerTest extends WebTestCase
         $this->assertPhoneEquals($this->userOriginalPhoneNumber);
     }
 
+    // Tests for POST /users/forgot-password
+
+    public function testPostForgotPasswordSetConfirmationCode()
+    {
+        $this->givenUser('user-without-confirmation-token');
+        $this->performPostUserForgotPassword(
+            ['contact_info' => $this->user->getEmail()]
+        );
+        $this->assertOkSuccess();
+        $this->assertJsonResponse($this->response);
+        $this->assertUserHasConfirmationTokenSet();
+    }
+
+    public function testPostForgotPasswordNotFoundIfNobodyWithEmail()
+    {
+        $this->performPostUserForgotPassword(
+            ['contact_info' => 'nobody@example.com']
+        );
+        $this->assertNotFoundError();
+    }
+
+    // Tests for Patch /users/{}/password
+    public function testPatchUserPasswordChangePassword()
+    {
+        $this->givenUser('user-with-confirmation-token');
+        $this->performPatchUser(
+            '/reset-password',
+            [
+                'new_password' => 'newpassword',
+                'validation_code' => $this->user->getConfirmationToken(),
+            ]
+        );
+        $this->assertNoContentResponse();
+    }
+
+    public function testPatchUserPasswordWithWrongCodeReturnsBadRequest()
+    {
+        $this->givenUser('user-with-confirmation-token');
+        $this->performPatchUser(
+            '/reset-password',
+            [
+                'new_password' => 'newpassword',
+                'validation_code' => $this->user->getConfirmationToken().'bad',
+            ]
+        );
+        $this->assertBadRequestError();
+    }
+
+
+
     // conveniency methods
 
     private function performPostUser(array $userPayload)
@@ -207,6 +257,15 @@ class UsersControllerTest extends WebTestCase
             'POST',
             '/users',
             $userPayload
+        );
+    }
+
+    private function performPostUserForgotPassword(array $payload)
+    {
+        $this->performJsonClientRequest(
+            'POST',
+            '/users/forgot-password',
+            $payload
         );
     }
 

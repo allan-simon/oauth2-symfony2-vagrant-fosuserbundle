@@ -228,6 +228,35 @@ echo '
 
 ```
 
+## Forgot password
+
+```
+echo '
+{
+    "contact_info" : "EMAIL_OR_PHONE_NUMBER"
+}
+' |  http POST http://127.0.0.1:8089/app_dev.php/users/forgot-password
+
+```
+
+if you've entered an existing email or phone number it will return you
+
+```
+{ 'id' : USER_ID }
+```
+
+in the meantime a validation code will be sent to you, you can then use the USER_ID and that VALIDATION_CODE to reset your password using the call
+
+```
+echo '
+{
+    "new_password" : "NEW_PASSWORD",
+    "validation_code" : "VALIDATION_CODE"
+}
+' |  http PATCH http://127.0.0.1:8089/app_dev.php/users/{id}/reset-password
+
+```
+
 
 # Basic Development tasks
 

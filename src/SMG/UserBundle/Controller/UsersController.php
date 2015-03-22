@@ -202,6 +202,69 @@ class UsersController extends FOSRestController
     }
 
     /**
+     * Permit a user who has forgotten his password to request
+     * a validation to be sent to either his email or phone number
+     *
+     * @Annotations\Post("/users/forgot-password")
+     */
+    public function postUsersForgotPasswordAction(Request $request)
+    {
+        $requestData = $this->requestIsJsonWithKeysOrThrow(
+            $request,
+            ['contact_info']
+        );
+
+        $contactInfo = $requestData['contact_info'];
+
+        $userByEmail = $this->findUserByEmail($contactInfo);
+        $userByPhone = $this->findUserByPhoneNumber($contactInfo);
+        $user = (
+            $userByEmail !== null ?
+            $userByEmail :
+            $userByPhone
+        );
+
+        if ($userByEmail === null && $userByPhone === null) {
+            throw $this->createNotFoundException();
+        }
+
+        $user->setConfirmationToken("123456");
+        //TODO send email or sms
+
+        $this->get('fos_user.user_manager')->updateUser($user);
+        return $this->handleView(
+            new View(['id' => $user->getId()])
+        );
+    }
+
+    /**
+     * Used for a user to reset his password if he's in possession
+     * of a validation code send to him during an earlier step
+     *
+     * @param User    $user    the user who's reseting password
+     * @param Request $request
+     *
+     * @Annotations\Patch("/users/{id}/reset-password")
+     */
+    public function patchUserResetPasswordAction(
+        User $user,
+        Request $request
+    ) {
+        $requestData = $this->requestIsJsonWithKeysOrThrow(
+            $request,
+            ['new_password', 'validation_code']
+        );
+
+        if ($requestData['validation_code'] !== $user->getConfirmationToken()) {
+            throw new BadRequestHttpException();
+        }
+
+        $this->updateUserPassword($user, $requestData['new_password']);
+
+        return $this->handleView(new View());
+    }
+
+    /**
      * @Annotations\Put("/users/{id}/confirmation-token/{confirmationToken}")
      */
     public function putUserActivationCodeAction($id, $confirmationToken)
@@ -231,6 +294,26 @@ class UsersController extends FOSRestController
         );
 
     } 
+
+    /**
+     * TODO: move in User manager
+     */
+    private function findUserByEmail($email)
+    {
+        return $this->getDoctrine()
+            ->getRepository('SMGUserBundle:User')
+            ->findOneByEmail($email);
+    }
+
+    /**
+     * TODO: move in User manager
+     */
+    private function findUserByPhoneNumber($phoneNumber)
+    {
+        return $this->getDoctrine()
+            ->getRepository('SMGUserBundle:User')
+            ->findOneByPhoneNumber($phoneNumber);
+    }
 
     /**
      * @return bool
