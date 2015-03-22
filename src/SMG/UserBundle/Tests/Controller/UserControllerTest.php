@@ -10,6 +10,8 @@ class UsersControllerTest extends WebTestCase
     use TestHelpersTrait;
 
     private $user;
+    private $userOriginalEmail;
+    private $userOriginalPhoneNumber;
 
     public function setUp()
     {
@@ -57,7 +59,7 @@ class UsersControllerTest extends WebTestCase
         $this->performPostUser($userPayload);
         $this->assertAcceptedSuccess();
         $this->assertUserCreated('new_user');
-        $this->assertPhoneEquals('new_user', '004212345');
+        $this->assertUserWithNameHasPhoneEquals('new_user', '004212345');
     }
 
     // Tests for PATCH /users/{id}/password
@@ -90,6 +92,112 @@ class UsersControllerTest extends WebTestCase
         $this->assertPermissionDenied();
     }
 
+    // Tests for PATCH /users/{}/request-change-contact-info
+
+    public function testPatchUserRequestChangeInfoWithEmailSetConfirmationTokenButDoesNotChangeEmailOrPhoneNumber()
+    {
+        $this->givenUser('user-without-confirmation-token');
+        $this->performPatchUser(
+            '/request-change-contact-info',
+            ['new_contact_info' => 'newemail@example.com']
+        );
+        $this->assertNoContentResponse();
+        $this->assertEmailEquals($this->userOriginalEmail);
+        $this->assertPhoneEquals($this->userOriginalPhoneNumber);
+        $this->assertUserHasConfirmationTokenSet();
+    }
+
+    public function testPatchUserRequestChangeInfoWithPhoneNumberSetConfirmationTokenButDoesNotChangeEmailOrPhoneNumber()
+    {
+        $this->givenUser('user-without-confirmation-token');
+        $this->performPatchUser(
+            '/request-change-contact-info',
+            ['new_contact_info' => '7891234']
+        );
+        $this->assertNoContentResponse();
+        $this->assertEmailEquals($this->userOriginalEmail);
+        $this->assertPhoneEquals($this->userOriginalPhoneNumber);
+        $this->assertUserHasConfirmationTokenSet();
+    }
+
+    public function testPatchUserRequestChangeInfoWithInvalidInputGiveBadRequest()
+    {
+        $this->givenUser('user-without-confirmation-token');
+        $this->performPatchUser(
+            '/request-change-contact-info',
+            ['new_contact_info' => 'wrong input']
+        );
+        $this->assertBadRequestError();
+        $this->assertUserHasNoConfirmationTokenSet();
+    }
+
+    // Tests for PATCH /users/{}/contact-info
+
+    public function testPatchUserContactInfoWithValidEmailChangeUserEmail()
+    {
+        $newEmail = "newemail@example.com";
+
+        $this->givenUser('user-with-confirmation-token');
+        $this->performPatchUser(
+            '/contact-info',
+            [
+                'new_contact_info' => $newEmail,
+                'validation_code' => $this->user->getConfirmationToken(),
+            ]
+        );
+        $this->assertNoContentResponse();
+        $this->assertEmailEquals($newEmail);
+        $this->assertPhoneEquals($this->userOriginalPhoneNumber);
+    }
+
+    public function testPatchUserContactInfoWithValidPhoneChangeUserPhone()
+    {
+        $newPhone = "789789";
+
+        $this->givenUser('user-with-confirmation-token');
+        $this->performPatchUser(
+            '/contact-info',
+            [
+                'new_contact_info' => $newPhone,
+                'validation_code' => $this->user->getConfirmationToken(),
+            ]
+        );
+        $this->assertNoContentResponse();
+        $this->assertEmailEquals($this->userOriginalEmail);
+        $this->assertPhoneEquals($newPhone);
+    }
+
+    public function testPatchUserContactInfoWithInvalidValidationCodeBadRequest()
+    {
+        $newPhone = "789789";
+
+        $this->givenUser('user-with-confirmation-token');
+        $this->performPatchUser(
+            '/contact-info',
+            [
+                'new_contact_info' => $newPhone,
+                'validation_code' => $this->user->getConfirmationToken().'bad',
+            ]
+        );
+        $this->assertBadRequestError();
+        $this->assertEmailEquals($this->userOriginalEmail);
+        $this->assertPhoneEquals($this->userOriginalPhoneNumber);
+    }
+
+    public function testPatchUserContactInfoWithInvalidInfoBadRequest()
+    {
+        $this->givenUser('user-with-confirmation-token');
+        $this->performPatchUser(
+            '/contact-info',
+            [
+                'new_contact_info' => 'invalid data',
+                'validation_code' => $this->user->getConfirmationToken(),
+            ]
+        );
+        $this->assertBadRequestError();
+        $this->assertEmailEquals($this->userOriginalEmail);
+        $this->assertPhoneEquals($this->userOriginalPhoneNumber);
+    }
 
     // conveniency methods
 
@@ -132,8 +240,7 @@ class UsersControllerTest extends WebTestCase
     {
         return $this->em->getRepository('SMGUserBundle:User')->findOneByUsername($username);
     }
-
-    private function assertPhoneEquals($username, $phone)
+    private function assertUserWithNameHasPhoneEquals($username, $phone)
     {
         $user = $this->findUserByUsername($username);
         $this->assertEquals(
@@ -143,9 +250,31 @@ class UsersControllerTest extends WebTestCase
         );
     }
 
+    private function assertPhoneEquals($phone)
+    {
+        $this->em->refresh($this->user);
+        $this->assertEquals(
+            $phone,
+            $this->user->getPhoneNumber(),
+            'Phone should get normalized'
+        );
+    }
+
+    private function assertEmailEquals($email)
+    {
+        $this->em->refresh($this->user);
+        $this->assertEquals(
+            $email,
+            $this->user->getEmail()
+        );
+    }
+
+
     private function givenUser($fixtureName)
     {
         $this->user = $this->fixtures->getReference($fixtureName);
+        $this->userOriginalEmail = $this->user->getEmail();
+        $this->userOriginalPhoneNumber = $this->user->getPhoneNumber();
     }
 
     private function assertUserCreated($username)
@@ -158,5 +287,23 @@ class UsersControllerTest extends WebTestCase
     {
         $user = $this->findUserByUsername($username);
         $this->assertEquals(null, $user, 'A user should not be created');
+    }
+
+    private function assertUserHasConfirmationTokenSet()
+    {
+        $this->em->refresh($this->user);
+        $this->assertFalse(
+            empty($this->user->getConfirmationToken()),
+            'confirmation token should not be empty'
+        );
+    }
+
+    private function assertUserHasNoConfirmationTokenSet()
+    {
+        $this->em->refresh($this->user);
+        $this->assertTrue(
+            empty($this->user->getConfirmationToken()),
+            'confirmation token should be empty'
+        );
     }
 }

@@ -4,6 +4,7 @@ namespace SMG\UserBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations;
@@ -96,12 +97,14 @@ class UsersController extends FOSRestController
     }
 
     /**
-     * Change user's email or phone
+     * Request change user's email or phone
      *
-     * @Annotations\Patch("/users/{id}/contact-info")
+     * @Annotations\Patch("/users/{id}/request-change-contact-info")
      */
-    public function patchUserContactInfodAction(User $user, Request $request)
-    {
+    public function patchUserRequestChangeContactInfoAction(
+        User $user,
+        Request $request
+    ) {
         $requestData = $this->requestIsJsonWithKeysOrThrow(
             $request,
             ['new_contact_info']
@@ -117,13 +120,14 @@ class UsersController extends FOSRestController
 
         $errors = $validator->validateValue($contactInfo, $emailAssert);
         if (count($errors) === 0) {
-            $user->setEmail($contactInfo);
             $user->setConfirmationToken("123456");
+
             //TODO send email
-            $manager->updateUser($user);
+            $this->get('fos_user.user_manager')->updateUser($user);
             return $this->handleView(new View());
         }
 
+        $oldPhoneNumber = $user->getPhoneNumber();
         // we set user directly here so we can reuse the validator
         // of User entity for phone number
         $phoneNumber = str_replace('+', '00', $contactInfo);
@@ -132,7 +136,59 @@ class UsersController extends FOSRestController
         $errors = $validator->validate($user, ['phone_check']);
         if (count($errors) === 0) {
             $user->setConfirmationToken("123456");
+            $user->setPhoneNumber($oldPhoneNumber);
             //TODO send SMS
+            $this->get('fos_user.user_manager')->updateUser($user);
+            return $this->handleView(new View());
+        }
+
+        return $this->handleView(
+            new View(
+                ['message' => 'bst.changecontactinfo.invalid'],
+                Response::HTTP_BAD_REQUEST
+            )
+        );
+    }
+
+    /**
+     * change user's email or phone, with validation code received in previous step
+     *
+     * @Annotations\Patch("/users/{id}/contact-info")
+     */
+    public function patchUserChangeContactInfoAction(User $user, Request $request)
+    {
+        $requestData = $this->requestIsJsonWithKeysOrThrow(
+            $request,
+            ['new_contact_info', 'validation_code']
+        );
+
+        if ($requestData['validation_code'] !== $user->getConfirmationToken()) {
+            throw new BadRequestHttpException();
+        }
+
+        $contactInfo = $requestData['new_contact_info'];
+
+        $manager = $this->get('fos_user.user_manager');
+        $validator = $this->container->get('validator');
+
+        $emailAssert = new Assert\Email();
+        $emailAssert->message = 'bst.email.invalid';
+
+        $errors = $validator->validateValue($contactInfo, $emailAssert);
+        if (count($errors) === 0) {
+            $user->setEmail($contactInfo);
+            $manager->updateUser($user);
+            return $this->handleView(new View());
+        }
+
+        $oldPhoneNumber = $user->getPhoneNumber();
+        // we set user directly here so we can reuse the validator
+        // of User entity for phone number
+        $phoneNumber = str_replace('+', '00', $contactInfo);
+        $user->setPhoneNumber($phoneNumber);
+
+        $errors = $validator->validate($user, ['phone_check']);
+        if (count($errors) === 0) {
             $manager->updateUser($user);
             return $this->handleView(new View());
         }
@@ -213,7 +269,7 @@ class UsersController extends FOSRestController
 
         foreach ($keys as $key) {
             if (empty($json[$key])) {
-                throw new BadRequestHttpException();
+                throw new BadRequestHttpException($key. ' is missing');
             }
         }
         return $json;

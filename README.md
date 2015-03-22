@@ -209,19 +209,24 @@ echo '
 {
     "new_contact_info" : "NEW_EMAIL_OR_PHONE_NUMBER"
 }
+' |  http PATCH http://127.0.0.1:8089/app_dev.php/users/{id}/request-change-contact-info
+
+```
+
+The server will send a validation code to the email or phone number given
+
+Then using this validation code a second call need to be made to this API call:
+
+```
+echo '
+{
+    "new_contact_info" : "NEW_EMAIL_OR_PHONE_NUMBER"
+    "validation_code" : "VALIDATION_CODE"
+}
 ' |  http PATCH http://127.0.0.1:8089/app_dev.php/users/{id}/contact-info
 
 ```
 
-The server will be smart enough to either update the phone number or the email
-depending on the value
-
-then a validation coken will be sent, that can be confirm through the same
-api call as for registration
-
-```
-http PUT http://127.0.0.1:8089/app_dev.php/users/{id}/confirmation-token/{confirmationToken}
-```
 
 # Basic Development tasks
 
