@@ -15,15 +15,12 @@ class SecurityController extends Controller
      * HTTP status 200 => valid
      * HTTP status 410 (gone) => not valid
      *
-     * @param Request $request           wrap http headers etc.
-     * @param string  $accessTokenString access token to check the validity of
+     * @param string $accessTokenString access token to check the validity of
      *
      * @return Response
      */
-    public function accessTokenValidAction(
-        Request $request,
-        $accessTokenString
-    ) {
+    public function accessTokenValidAction($accessTokenString)
+    {
 
         try {
             $server = $this->get('fos_oauth_server.server');
