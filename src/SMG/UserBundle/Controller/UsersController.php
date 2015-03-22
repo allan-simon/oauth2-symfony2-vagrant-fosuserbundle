@@ -34,7 +34,6 @@ class UsersController extends FOSRestController
         }
 
         $manager = $this->get('fos_user.user_manager');
-        $generator = $this->get('fos_user.util.token_generator');
         // we need to create a new user to get the salt
         $newUser = $manager->createUser();
 
@@ -55,6 +54,7 @@ class UsersController extends FOSRestController
         $newUser->setPlainPassword($user->getPlainPassword());
         $newUser->setRoles(array('ROLE_USER'));
 // TODO: #1 when we will have implemented the email sending
+//      $generator = $this->get('fos_user.util.token_generator');
 //      $newUser->setConfirmationToken($generator->generateToken());
         $newUser->setConfirmationToken("123456");
         $newUser->setEnabled(false);
@@ -112,7 +112,6 @@ class UsersController extends FOSRestController
 
         $contactInfo = $requestData['new_contact_info'];
 
-        $manager = $this->get('fos_user.user_manager');
         $validator = $this->container->get('validator');
 
         $emailAssert = new Assert\Email();
@@ -181,7 +180,6 @@ class UsersController extends FOSRestController
             return $this->handleView(new View());
         }
 
-        $oldPhoneNumber = $user->getPhoneNumber();
         // we set user directly here so we can reuse the validator
         // of User entity for phone number
         $phoneNumber = str_replace('+', '00', $contactInfo);
