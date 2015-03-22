@@ -13,4 +13,8 @@ before_script:
 - psql -c "create database symfony with owner vagrant;" -U postgres
 - echo y | php app/console doctrine:migrations:migrate
 
-script: phpunit -c app
+script: phpunit -c app --coverage-clover=coverage.clover
+
+after_script:
+- wget https://scrutinizer-ci.com/ocular.phar
+- php ocular.phar code-coverage:upload --format=php-clover coverage.clover
