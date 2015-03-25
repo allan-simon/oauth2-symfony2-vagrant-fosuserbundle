@@ -354,7 +354,7 @@ class UsersController extends FOSRestController
 
         foreach ($keys as $key) {
             if (empty($json[$key])) {
-                throw new BadRequestHttpException($key.' is missing');
+                throw new BadRequestHttpException($message);
             }
         }
         return $json;
@@ -406,6 +406,7 @@ class UsersController extends FOSRestController
     {
         //TODO add support for SMS
         dump($phone);
+        dump($token);
     }
 
     private function generateToken()
