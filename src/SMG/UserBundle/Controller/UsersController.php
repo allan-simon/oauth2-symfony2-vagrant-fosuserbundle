@@ -415,7 +415,7 @@ class UsersController extends FOSRestController
         // but it's not mobile user friendly
 
         return str_pad(
-            rand(0, pow(10, self::TOKEN_DIGITS)-1),
+            rand(0, pow(10, self::TOKEN_DIGITS) - 1),
             self::TOKEN_DIGITS,
             '0',
             STR_PAD_LEFT
