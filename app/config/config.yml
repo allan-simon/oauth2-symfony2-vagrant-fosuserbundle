@@ -104,3 +104,13 @@ jms_serializer:
             FOSUserBundle:
                 path: '%kernel.root_dir%/Resources/FOSUserBundle/serializer'
                 namespace_prefix: 'FOS\UserBundle'
+
+
+cspoo_sms:
+    default_transport: %sms_transport%
+    transports:
+        - 
+            name: %sms_transport%
+            type: %sms_transport%
+            username: %sms_username%
+            password: %sms_passowrd%

@@ -13,3 +13,7 @@ parameters:
     locale: en
     secret: ae4f49befc969ff5feada55bcc88e3c0
     database_path: null
+
+    sms_transport: winic
+    sms_username: replaceme
+    sms_password: replaceme

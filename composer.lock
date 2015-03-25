@@ -4,8 +4,54 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2f0aa5a04a1639eb8ce501145e870761",
+    "hash": "12495934124ab511ec6105c687faef9e",
     "packages": [
+        {
+            "name": "cspoo/symfony-sms-bundle",
+            "version": "dev-add_winic_chinese_provider",
+            "target-dir": "cspoo/SmsBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/allan-simon/symfony-sms-bundle.git",
+                "reference": "b1dea481ad7d289e2895ededa1fbc3e9615f14a2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/allan-simon/symfony-sms-bundle/zipball/b1dea481ad7d289e2895ededa1fbc3e9615f14a2",
+                "reference": "b1dea481ad7d289e2895ededa1fbc3e9615f14a2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "cspoo\\SmsBundle": ""
+                }
+            },
+            "license": [
+                "GPL"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Spoo",
+                    "email": "mail@christian-spoo.info",
+                    "homepage": "http://www.christian-spoo.info/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Symfony SMS bundle",
+            "homepage": "https://github.com/tehplague/symfony-sms-bundle",
+            "keywords": [
+                "SMS",
+                "notification"
+            ],
+            "support": {
+                "source": "https://github.com/allan-simon/symfony-sms-bundle/tree/add_winic_chinese_provider"
+            },
+            "time": "2015-03-25 15:44:11"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.3",
@@ -708,12 +754,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "b8ed2683bf48cf13c92f80d99cb723ae28efb227"
+                "reference": "65978aa4e9ffca3bb632225ad8c6320077d80d85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/b8ed2683bf48cf13c92f80d99cb723ae28efb227",
-                "reference": "b8ed2683bf48cf13c92f80d99cb723ae28efb227",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/65978aa4e9ffca3bb632225ad8c6320077d80d85",
+                "reference": "65978aa4e9ffca3bb632225ad8c6320077d80d85",
                 "shasum": ""
             },
             "require": {
@@ -758,7 +804,7 @@
                 "database",
                 "migrations"
             ],
-            "time": "2015-03-13 10:18:59"
+            "time": "2015-03-23 09:47:20"
         },
         {
             "name": "doctrine/orm",
@@ -1367,16 +1413,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/JMSSerializerBundle.git",
-                "reference": "8bce2e83779ebdf70116018e68d8d9f930bbe124"
+                "reference": "c49628cfc8b8ce7404665b4e6528487d780e7d68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/JMSSerializerBundle/zipball/8bce2e83779ebdf70116018e68d8d9f930bbe124",
-                "reference": "8bce2e83779ebdf70116018e68d8d9f930bbe124",
+                "url": "https://api.github.com/repos/schmittjoh/JMSSerializerBundle/zipball/c49628cfc8b8ce7404665b4e6528487d780e7d68",
+                "reference": "c49628cfc8b8ce7404665b4e6528487d780e7d68",
                 "shasum": ""
             },
             "require": {
-                "jms/serializer": "~0.11",
+                "jms/serializer": "~0.12",
                 "php": ">=5.3.2",
                 "symfony/framework-bundle": "~2.1"
             },
@@ -1389,6 +1435,7 @@
                 "symfony/finder": "*",
                 "symfony/form": "*",
                 "symfony/process": "*",
+                "symfony/stopwatch": "*",
                 "symfony/twig-bundle": "*",
                 "symfony/validator": "*",
                 "symfony/yaml": "*"
@@ -1426,7 +1473,7 @@
                 "serialization",
                 "xml"
             ],
-            "time": "2015-01-12 17:22:05"
+            "time": "2015-03-24 16:48:01"
         },
         {
             "name": "kriswallsmith/assetic",
@@ -1714,17 +1761,17 @@
         },
         {
             "name": "sensio/distribution-bundle",
-            "version": "v3.0.18",
+            "version": "v3.0.19",
             "target-dir": "Sensio/Bundle/DistributionBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioDistributionBundle.git",
-                "reference": "ac026149ffb1d3a5c893290d2d3ca8795013de08"
+                "reference": "c68d47e3bcdfca74d92ab9d9382e276adf451424"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/ac026149ffb1d3a5c893290d2d3ca8795013de08",
-                "reference": "ac026149ffb1d3a5c893290d2d3ca8795013de08",
+                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/c68d47e3bcdfca74d92ab9d9382e276adf451424",
+                "reference": "c68d47e3bcdfca74d92ab9d9382e276adf451424",
                 "shasum": ""
             },
             "require": {
@@ -1770,7 +1817,7 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2015-02-27 12:59:18"
+            "time": "2015-03-25 09:01:40"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -2418,24 +2465,24 @@
     "packages-dev": [
         {
             "name": "doctrine/data-fixtures",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/data-fixtures.git",
-                "reference": "b4a135c7db56ecc4602b54a2184368f440cac33e"
+                "reference": "b6e28afc4a52bfbb6768091f890d08085aa77e70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/b4a135c7db56ecc4602b54a2184368f440cac33e",
-                "reference": "b4a135c7db56ecc4602b54a2184368f440cac33e",
+                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/b6e28afc4a52bfbb6768091f890d08085aa77e70",
+                "reference": "b6e28afc4a52bfbb6768091f890d08085aa77e70",
                 "shasum": ""
             },
             "require": {
-                "doctrine/common": ">=2.2,<2.5-dev",
+                "doctrine/common": "~2.2",
                 "php": ">=5.3.2"
             },
             "require-dev": {
-                "doctrine/orm": ">=2.2,<2.5-dev"
+                "doctrine/orm": "~2.4"
             },
             "suggest": {
                 "doctrine/mongodb-odm": "For loading MongoDB ODM fixtures",
@@ -2460,9 +2507,7 @@
             "authors": [
                 {
                     "name": "Jonathan Wage",
-                    "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/",
-                    "role": "Creator"
+                    "email": "jonwage@gmail.com"
                 }
             ],
             "description": "Data Fixtures for all Doctrine Object Managers",
@@ -2470,7 +2515,7 @@
             "keywords": [
                 "database"
             ],
-            "time": "2013-07-10 17:04:07"
+            "time": "2015-03-23 01:13:09"
         },
         {
             "name": "doctrine/doctrine-fixtures-bundle",
@@ -2588,16 +2633,16 @@
         },
         {
             "name": "fabpot/php-cs-fixer",
-            "version": "v1.5.1",
+            "version": "v1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "85777ebc6a1dac48c904acf9412b29b58b5dd592"
+                "reference": "1dff3bb23fef67d62e266249cd3203b0aa025a7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/85777ebc6a1dac48c904acf9412b29b58b5dd592",
-                "reference": "85777ebc6a1dac48c904acf9412b29b58b5dd592",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/1dff3bb23fef67d62e266249cd3203b0aa025a7e",
+                "reference": "1dff3bb23fef67d62e266249cd3203b0aa025a7e",
                 "shasum": ""
             },
             "require": {
@@ -2637,7 +2682,7 @@
                 }
             ],
             "description": "A script to automatically fix Symfony Coding Standard",
-            "time": "2015-03-13 19:33:24"
+            "time": "2015-03-22 12:52:15"
         },
         {
             "name": "liip/functional-test-bundle",
@@ -3674,6 +3719,7 @@
         "doctrine/migrations": 20,
         "doctrine/doctrine-migrations-bundle": 20,
         "jms/serializer-bundle": 20,
+        "cspoo/symfony-sms-bundle": 20,
         "friendsofsymfony/oauth-server-bundle": 20,
         "squizlabs/php_codesniffer": 0,
         "fabpot/php-cs-fixer": 0

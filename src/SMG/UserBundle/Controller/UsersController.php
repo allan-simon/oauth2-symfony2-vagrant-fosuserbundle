@@ -404,9 +404,9 @@ class UsersController extends FOSRestController
      */
     private function sendTokenByPhone($phone, $token)
     {
-        //TODO add support for SMS
-        dump($phone);
-        dump($token);
+        $smsSender = $this->container->get('sms');
+        $sms = $smsSender->createSms($phone, $token);
+        dump($smsSender->sendSms($sms));
     }
 
     private function generateToken()

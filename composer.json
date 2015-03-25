@@ -6,6 +6,12 @@
     "autoload": {
         "psr-0": { "": "src/", "SymfonyStandard": "app/" }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/allan-simon/symfony-sms-bundle"
+        }
+    ],
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "~2.5",
@@ -21,6 +27,7 @@
         "doctrine/doctrine-migrations-bundle": "2.1.*@dev",
         "incenteev/composer-parameter-handler": "~2.0",
         "jms/serializer-bundle": "0.13.*@dev",
+        "cspoo/symfony-sms-bundle": "dev-add_winic_chinese_provider",
         "friendsofsymfony/rest-bundle": "~1.5.0",
         "friendsofsymfony/user-bundle": "~1.3",
         "friendsofsymfony/oauth-server-bundle": "dev-master"
