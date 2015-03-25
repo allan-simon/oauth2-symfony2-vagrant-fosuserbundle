@@ -14,6 +14,7 @@ use SMG\UserBundle\Entity\User;
 
 class UsersController extends FOSRestController
 {
+    const TOKEN_DIGITS = 6;
     /**
      * @Annotations\Post("/users")
      * @ParamConverter("user", converter="fos_rest.request_body")
@@ -53,10 +54,11 @@ class UsersController extends FOSRestController
         $newUser->setEmail($email);
         $newUser->setPlainPassword($user->getPlainPassword());
         $newUser->setRoles(array('ROLE_USER'));
-// TODO: #1 when we will have implemented the email sending
-//      $generator = $this->get('fos_user.util.token_generator');
-//      $newUser->setConfirmationToken($generator->generateToken());
-        $newUser->setConfirmationToken("123456");
+
+        $token = $this->generateToken();
+        $this->sendToken($email, $phoneNumber, $token);
+
+        $newUser->setConfirmationToken($token);
         $newUser->setEnabled(false);
         $newUser->setLocked(true);
         $manager->updateUser($newUser);
@@ -114,14 +116,15 @@ class UsersController extends FOSRestController
 
         $validator = $this->container->get('validator');
 
+        $token = $this->generateToken();
+        $user->setConfirmationToken($token);
+
         $emailAssert = new Assert\Email();
         $emailAssert->message = 'bst.email.invalid';
 
         $errors = $validator->validateValue($contactInfo, $emailAssert);
         if (count($errors) === 0) {
-            $user->setConfirmationToken("123456");
-
-            //TODO send email
+            $this->sendTokenByEmail($contactInfo, $token);
             $this->get('fos_user.user_manager')->updateUser($user);
             return $this->handleView(new View());
         }
@@ -134,9 +137,11 @@ class UsersController extends FOSRestController
 
         $errors = $validator->validate($user, ['phone_check']);
         if (count($errors) === 0) {
-            $user->setConfirmationToken("123456");
+            $this->sendTokenByPhone($phoneNumber, $token);
+
+            // we put back the old phone number as it will be updated
+            // only if the user send us back the confirmation token
             $user->setPhoneNumber($oldPhoneNumber);
-            //TODO send SMS
             $this->get('fos_user.user_manager')->updateUser($user);
             return $this->handleView(new View());
         }
@@ -226,8 +231,13 @@ class UsersController extends FOSRestController
             throw $this->createNotFoundException();
         }
 
-        $user->setConfirmationToken("123456");
-        //TODO send email or sms
+        $token = $this->generateToken();
+        $this->sendToken(
+            $user->getEmail(),
+            $user->getPhoneNumber(),
+            $token
+        );
+        $user->setConfirmationToken($token);
 
         $this->get('fos_user.user_manager')->updateUser($user);
         return $this->handleView(
@@ -348,5 +358,67 @@ class UsersController extends FOSRestController
             }
         }
         return $json;
+    }
+
+    /**
+     * /!\ This method does not validate the input
+     * making sure the email is a real email and phone is an actual phone
+     * is the responsability of the calling method
+     *
+     * @param string|null $email if null, email not sent
+     * @param string|null $phone if null, SMS not sent
+     * @param string      $token token to send to the user
+     *
+     * @return void
+     */
+    private function sendToken(
+        $email,
+        $phone,
+        $token
+    ) {
+        if (!empty($email)) {
+            $this->sendTokenByEmail($email, $token);
+        }
+
+        if (!empty($phone)) {
+            $this->sendTokenByPhone($phone, $token);
+        }
+    }
+
+    /**
+     *
+     */
+    private function sendTokenByEmail($email, $token)
+    {
+        $mailer = $this->get('mailer');
+        $message = $mailer->createMessage()
+            ->setSubject('Your token')
+            ->setFrom($this->container->getParameter('mailer_user'))
+            ->setTo($email)
+            ->setBody('Token '.$token, 'text/plain');
+        $mailer->send($message);
+    }
+
+    /**
+     *
+     */
+    private function sendTokenByPhone($phone, $token)
+    {
+        //TODO add support for SMS
+        dump($phone);
+    }
+
+    private function generateToken()
+    {
+        // shamelessy taken from http://stackoverflow.com/a/8216031/1185460
+        // one could get('fos_user.util.token_generator') instead
+        // but it's not mobile user friendly
+
+        return str_pad(
+            rand(0, pow(10, self::TOKEN_DIGITS)-1),
+            self::TOKEN_DIGITS,
+            '0',
+            STR_PAD_LEFT
+        );
     }
 }
