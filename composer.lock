@@ -4,21 +4,21 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "12495934124ab511ec6105c687faef9e",
+    "hash": "a3f6128587211128a8d143b7a8037ec1",
     "packages": [
         {
             "name": "cspoo/symfony-sms-bundle",
-            "version": "dev-add_winic_chinese_provider",
+            "version": "dev-add_disable_delivery_parameter",
             "target-dir": "cspoo/SmsBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/allan-simon/symfony-sms-bundle.git",
-                "reference": "b1dea481ad7d289e2895ededa1fbc3e9615f14a2"
+                "reference": "5a474fb0375a88941a6002550e51e3e32d17b637"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/allan-simon/symfony-sms-bundle/zipball/b1dea481ad7d289e2895ededa1fbc3e9615f14a2",
-                "reference": "b1dea481ad7d289e2895ededa1fbc3e9615f14a2",
+                "url": "https://api.github.com/repos/allan-simon/symfony-sms-bundle/zipball/5a474fb0375a88941a6002550e51e3e32d17b637",
+                "reference": "5a474fb0375a88941a6002550e51e3e32d17b637",
                 "shasum": ""
             },
             "require": {
@@ -48,9 +48,9 @@
                 "notification"
             ],
             "support": {
-                "source": "https://github.com/allan-simon/symfony-sms-bundle/tree/add_winic_chinese_provider"
+                "source": "https://github.com/allan-simon/symfony-sms-bundle/tree/add_disable_delivery_parameter"
             },
-            "time": "2015-03-25 15:44:11"
+            "time": "2015-03-26 03:29:27"
         },
         {
             "name": "doctrine/annotations",
