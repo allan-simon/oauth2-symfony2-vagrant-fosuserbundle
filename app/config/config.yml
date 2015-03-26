@@ -113,4 +113,4 @@ cspoo_sms:
             name: %sms_transport%
             type: %sms_transport%
             username: %sms_username%
-            password: %sms_passowrd%
+            password: %sms_password%
