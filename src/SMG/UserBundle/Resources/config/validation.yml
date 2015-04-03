@@ -14,7 +14,7 @@ SMG\UserBundle\Entity\User:
                 groups: ['mobile_app_registration']
         username:
             - Length:
-                min: 6
+                min: 2
                 minMessage: fos_user.username.short
                 max: 255
                 maxMessage: fos_user.username.long
