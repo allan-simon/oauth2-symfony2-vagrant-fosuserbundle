@@ -7,11 +7,30 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
-* SMG\UserBundle\Entity\User
-*
-* @ORM\Entity
-* @ORM\Table(name="oauth_users")
-*/
+ * SMG\UserBundle\Entity\User
+ *
+ * @ORM\Entity
+ * @ORM\Table(name="oauth_users")
+ * @ORM\AttributeOverrides({
+ *     @ORM\AttributeOverride(
+ *         name="email",
+ *         column=@ORM\Column(
+ *             type="string",
+ *             nullable=true
+ *         )
+ *     ),
+ *     @ORM\AttributeOverride(
+ *          name="emailCanonical",
+ *          column=@ORM\Column(
+ *              type="string",
+ *              name="email_canonical",
+ *              length=255,
+ *              unique=true,
+ *              nullable=true
+ *          )
+ *     ),
+ * })
+ */
 class User extends BaseUser implements AdvancedUserInterface
 {
     /**

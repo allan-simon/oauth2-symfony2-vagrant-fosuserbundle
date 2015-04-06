@@ -39,15 +39,12 @@ class UsersController extends FOSRestController
         $newUser = $manager->createUser();
 
         $phoneNumber = $user->getPhoneNumber();
+        $email = $user->getEmail();
 
         // normalize phone number with international suffix
         if (!is_null($phoneNumber)) {
             $phoneNumber = str_replace('+', '00', $phoneNumber);
         }
-
-        //TODO find a better way to have nullable email
-        //     i.e for the moment we're setting it to empty string
-        $email = (string) $user->getEmail();
 
         $newUser->setUsername($user->getUsername());
         $newUser->setPhoneNumber($phoneNumber);
