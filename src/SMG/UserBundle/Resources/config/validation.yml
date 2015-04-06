@@ -8,13 +8,16 @@ SMG\UserBundle\Entity\User:
             fields: emailCanonical
             errorPath: email
             message: fos_user.email.already_used
+            groups: ['mobile_app_registration']
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: usernameCanonical
             errorPath: username
             message: fos_user.username.already_used
+            groups: ['mobile_app_registration']
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: phoneNumber
             message: bst.phonenumber.already_used
+            groups: ['mobile_app_registration']
 
     properties:
         email:
