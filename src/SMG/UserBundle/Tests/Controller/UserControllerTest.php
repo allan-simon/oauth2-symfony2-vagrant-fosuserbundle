@@ -62,6 +62,72 @@ class UsersControllerTest extends WebTestCase
         $this->assertUserWithNameHasPhoneEquals('new_user', '004212345');
     }
 
+    public function testPost2UsersWithSameEmailFail()
+    {
+        $userPayload = [
+            'email' => 'plop@plop.com',
+            'username' => 'new_user',
+            'plain_password' => 'new_password',
+        ];
+        $this->performPostUser($userPayload);
+        $this->assertAcceptedSuccess();
+        $this->assertUserCreated('new_user');
+
+        $secondUserPayload = [
+            'email' =>  $userPayload['email'],
+            'username' => 'new_user_2',
+            'plain_password' => 'new_password_2',
+        ];
+
+        $this->performPostUser($secondUserPayload);
+        $this->assertBadRequestError();
+        $this->assertUserNotCreated('new_user_2');
+    }
+
+    public function testPost2UsersWithSamePhoneFail()
+    {
+        $userPayload = [
+            'phone_number' => '1234567',
+            'username' => 'new_user',
+            'plain_password' => 'new_password',
+        ];
+        $this->performPostUser($userPayload);
+        $this->assertAcceptedSuccess();
+        $this->assertUserCreated('new_user');
+
+        $secondUserPayload = [
+            'phone_number' =>  $userPayload['phone_number'],
+            'username' => 'new_user_2',
+            'plain_password' => 'new_password_2',
+        ];
+
+        $this->performPostUser($secondUserPayload);
+        $this->assertBadRequestError();
+        $this->assertUserNotCreated('new_user_2');
+    }
+
+    public function testPost2UsersWithSameUsernameFail()
+    {
+        $userPayload = [
+            'phone_number' => '1234567',
+            'username' => 'new_user',
+            'plain_password' => 'new_password',
+        ];
+        $this->performPostUser($userPayload);
+        $this->assertAcceptedSuccess();
+        $this->assertUserCreated('new_user');
+
+        $secondUserPayload = [
+            'phone_number' =>  '432434243',
+            'username' => 'New_user',
+            'plain_password' => 'new_password_2',
+        ];
+
+        $this->performPostUser($secondUserPayload);
+        $this->assertBadRequestError();
+        $this->assertUserNotCreated('New_user');
+    }
+
     // Tests for PATCH /users/{id}/password
 
     public function testPatchUserPasswordUpdatePassword()

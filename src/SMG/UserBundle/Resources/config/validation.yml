@@ -4,6 +4,18 @@ SMG\UserBundle\Entity\User:
             expression: "this.getEmail() != '' or this.getPhoneNumber() != ''"
             message: bst.phone_and_email.missing
             groups: ['mobile_app_registration']
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: emailCanonical
+            errorPath: email
+            message: fos_user.email.already_used
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: usernameCanonical
+            errorPath: username
+            message: fos_user.username.already_used
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: phoneNumber
+            message: bst.phonenumber.already_used
+
     properties:
         email:
             - Length:
