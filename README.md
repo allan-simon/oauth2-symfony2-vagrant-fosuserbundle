@@ -129,6 +129,52 @@ http PUT http://127.0.0.1:8089/app_dev.php/users/{id}/confirmation-token/{confir
 
 if the user is correctly activate you will receive a `201 Created` status code
 
+if the data are posted are not correct a 400 status code will be returned, containing a JSON array
+of error message like this:
+
+```
+[
+
+    {
+        "message": "bst.phone_and_email.missing", 
+        "property_path": ""
+    }, 
+
+    {
+        "message": "fos_user.username.short", 
+        "property_path": "username"
+
+    }, 
+
+    {
+        "message": "fos_user.password.blank", 
+        "property_path": "plainPassword"
+    }
+]
+
+```
+
+each error has two fields :
+
+  * `message`: the error code, it's a pre-defined string constant, made to be somewhat human-readable
+  * `property`: if empty, it concerns the full form, if not, it contains the field concerned by the error message 
+
+possible value for message:
+
+  * `bst.phone_and_email.missing` : the user has input neither phone nor email
+  * `fos_user.email.already_used` : the email is already taken (it also check case-insensitive and all rules that apply to consider two emails identical)
+  * `fos_user.username.already_used` : the username is already taken (it also check case-insensitive and Unicode trick to obtain the same visual string to avoid user impersonnation)
+  * `bst.phonenumber.already_used` : phone number already used.
+  * `fos_user.email.short`: the email is too short
+  * `fos_user.email.long`: the email is too long
+  * `fos_user.username.short`: the email is too short (currently 2 characters)
+  * `fos_user.username.long`: the email is too long (currently 255 characters)
+  * `bst.phonenumber.short` : phone number too short ( < 3)
+  * `bst.phonenumber.long` : phone number too long ( > 20)
+  * `bst.phonenumber.space`: phone number contains space characters
+  * `bst.phonenumber.format`: phone number does not match the format (contains letters this kind of thing)
+  * `fos_user.password.blank`:  the password has not been precised by user.
+  * `fos_user.password.short`:  the password is too short ( < 3 characters)
 
 ## Get an authorization token with grant type *password*
 
