@@ -70,6 +70,18 @@
         "symfony-web-dir": "web",
         "symfony-assets-install": "relative",
         "incenteev-parameters": {
+            "env-map" : {
+                "database_host": "APP_DATABASE_PORT_5432_TCP_ADDR",
+                "database_port": "APP_DATABASE_PORT_5432_TCP_PORT",
+
+                "database_name": "APP_DB_NAME",
+                "database_user": "APP_DB_USER_NAME",
+                "database_password": "APP_DB_USER_PASSWORD",
+
+                "mailer_host": "APP_MAILER_HOST",
+                "mailer_user": "APP_MAILER_USER",
+                "mailer_password": "APP_MAILER_PASSWORD"
+            },
             "file": "app/config/parameters.yml"
         },
         "branch-alias": {

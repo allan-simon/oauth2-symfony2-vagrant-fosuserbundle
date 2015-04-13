@@ -3,8 +3,12 @@ vendor/
 bin/
 app/logs
 app/cache
+app/config/parameters.yml
 .vagrant/
+
 symfony.phar
 app/bootstrap.php.cache
 web/bundles/
 web/uploads/
+
+docker/

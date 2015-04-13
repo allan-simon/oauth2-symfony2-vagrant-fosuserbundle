@@ -19,6 +19,6 @@ parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
 
-    sms_transport: null
-    sms_username: null
-    sms_password: null
+    sms_transport: winic
+    sms_username: replaceme
+    sms_password: replaceme
