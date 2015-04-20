@@ -8,7 +8,7 @@ SMG\UserBundle\Entity\User:
             fields: emailCanonical
             errorPath: email
             message: fos_user.email.already_used
-            groups: ['mobile_app_registration']
+            groups: ['with_email']
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: usernameCanonical
             errorPath: username
@@ -17,7 +17,7 @@ SMG\UserBundle\Entity\User:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: phoneNumber
             message: bst.phonenumber.already_used
-            groups: ['mobile_app_registration']
+            groups: ['with_phone']
 
     properties:
         email:
@@ -26,7 +26,7 @@ SMG\UserBundle\Entity\User:
                 minMessage: fos_user.email.short
                 max: 255
                 maxMessage: fos_user.email.long
-                groups: ['mobile_app_registration']
+                groups: ['with_email']
         username:
             - Length:
                 min: 2
@@ -43,17 +43,17 @@ SMG\UserBundle\Entity\User:
                 minMessage: bst.phonenumber.short
                 max: 20
                 maxMessage: bst.phonenumber.long
-                groups: ['mobile_app_registration']
+                groups: ['with_phone']
             - Regex:
                 pattern: '/\s/'
                 match:   false
                 message: bst.phonenumber.space
-                groups: ['mobile_app_registration']
+                groups: ['with_phone']
             - Regex:
                 pattern: '/^\+?\d+$/'
                 match:   true
                 message: bst.phonenumber.format
-                groups: ['mobile_app_registration', 'phone_check']
+                groups: ['with_phone', 'phone_check']
         plainPassword:
             - NotBlank:
                 message: fos_user.password.blank

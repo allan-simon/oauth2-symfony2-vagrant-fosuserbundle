@@ -25,7 +25,6 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
  *              type="string",
  *              name="email_canonical",
  *              length=255,
- *              unique=true,
  *              nullable=true
  *          )
  *     ),
@@ -48,6 +47,12 @@ class User extends BaseUser implements AdvancedUserInterface
     public function __construct()
     {
         parent::__construct();
+        $this->email = null;
+        // note: when saving the user manager will put the email canonical
+        // to empty string hence why we removed the unique constraint,
+        // to avoid error being thrown when registering a user only with
+        // phone number
+        $this->emailCanonical = null;
     }
 
     public function getId()

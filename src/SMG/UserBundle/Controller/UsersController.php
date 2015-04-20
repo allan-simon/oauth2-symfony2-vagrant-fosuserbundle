@@ -21,10 +21,20 @@ class UsersController extends FOSRestController
      */
     public function postUsersAction(User $user)
     {
+        $validationRules = array('mobile_app_registration');
+
+        if (!is_null($user->getEmail())) {
+            $validationRules[] = 'with_email';
+        }
+
+        if (!is_null($user->getPhoneNumber())) {
+            $validationRules[] = 'with_phone';
+        }
+
         $validator = $this->container->get('validator');
         $errors = $validator->validate(
             $user,
-            array('mobile_app_registration')
+            $validationRules
         );
 
         if (count($errors) > 0) {
@@ -401,10 +411,8 @@ class UsersController extends FOSRestController
      */
     private function sendTokenByPhone($phone, $token)
     {
-        dump($token);
         $smsSender = $this->container->get('sms');
         $sms = $smsSender->createSms($phone, $token);
-        dump($smsSender->sendSms($sms));
     }
 
     private function generateToken()

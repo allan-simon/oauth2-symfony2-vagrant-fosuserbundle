@@ -125,7 +125,7 @@ class UserControllerTest extends WebTestCase
 
         $this->performPostUser($secondUserPayload);
         $this->assertAcceptedSuccess();
-        $this->assertUserCreated('new_user2');
+        $this->assertUserCreated('new_user_2');
     }
 
     public function testPost2UsersWithSameUsernameFail()
