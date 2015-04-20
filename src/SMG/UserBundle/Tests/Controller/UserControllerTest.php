@@ -335,7 +335,7 @@ class UserControllerTest extends WebTestCase
         $this->assertBadRequestError();
     }
 
-    // tests PUT /users{}/confirmation-token/{}
+    // tests PUT /users/{}/confirmation-token/{}
 
     public function testPutUserConfirmationTokenEnableUser()
     {
@@ -349,6 +349,17 @@ class UserControllerTest extends WebTestCase
         $this->givenUser('new-user');
         $this->performPutUserConfirmationCode('wrong_one');
         $this->assertNotFoundError();
+    }
+
+    // tests PATCH /users/{}/resend-confirmation-token
+    public function testPatchResendConfirmationTokenOfExistingUserWorks()
+    {
+        $this->givenUser('new-user');
+        $this->performPatchUser(
+            '/resend-confirmation-token',
+            []
+        );
+        $this->assertNoContentResponse();
     }
 
     // conveniency methods

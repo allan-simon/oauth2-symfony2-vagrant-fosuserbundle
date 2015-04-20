@@ -304,6 +304,22 @@ echo '
 
 ```
 
+## Reask for confirmation token to be sent
+
+if for some reason you want to be able to resend the sms/email
+containing the confirmation token sent after registration you can
+do using this API call (where `{id}` is to be replaced by the id
+given to you after registration)
+
+```
+http PATCH http://127.0.0.1:8089/app_dev.php/users/{id}/resend-confirmation-token
+```
+
+it returns a http status 204 in case of success, 404 if the user id does not
+exist.
+
+Note: the confirmation token will be the same as the one that was originally
+sent (in order not to confuse the user if finally get the first SMS etc.)
 
 # Basic Development tasks
 

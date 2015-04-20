@@ -257,6 +257,25 @@ class UsersController extends FOSRestController
     }
 
     /**
+     * Used for a user to resend his confirmation token.
+     *
+     * @param User    $user    the user who's reseting password
+     * @param Request $request
+     *
+     * @Annotations\Patch("/users/{id}/resend-confirmation-token")
+     */
+    public function patchUserResendConfirmationTokenAction(User $user)
+    {
+        $this->sendToken(
+            $user->getEmail(),
+            $user->getPhoneNumber(),
+            $user->getConfirmationToken()
+        );
+
+        return $this->handleView(new View());
+    }
+
+    /**
      * Used for a user to reset his password if he's in possession
      * of a validation code send to him during an earlier step.
      *
