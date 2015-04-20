@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
- * SMG\UserBundle\Entity\User
+ * SMG\UserBundle\Entity\User.
  *
  * @ORM\Entity
  * @ORM\Table(name="oauth_users")
@@ -45,7 +45,6 @@ class User extends BaseUser implements AdvancedUserInterface
      */
     protected $phoneNumber = null;
 
-
     public function __construct()
     {
         parent::__construct();
@@ -64,6 +63,7 @@ class User extends BaseUser implements AdvancedUserInterface
     public function setPhoneNumber($phoneNumber)
     {
         $this->phoneNumber = $phoneNumber;
+
         return $this;
     }
 
@@ -76,5 +76,4 @@ class User extends BaseUser implements AdvancedUserInterface
     {
         return true;
     }
-
 }

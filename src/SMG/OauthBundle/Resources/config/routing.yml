@@ -7,4 +7,3 @@ fos_oauth_server_authorize:
 smg_oauth_server_access_token_check:
     pattern:  /oauth/access_token_valid/{accessTokenString}
     defaults: { _controller: SMGOauthBundle:Security:accessTokenValid }
-

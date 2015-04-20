@@ -28,4 +28,3 @@ class AuthCode extends BaseAuthCode
      */
     protected $user;
 }
-

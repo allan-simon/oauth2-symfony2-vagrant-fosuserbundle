@@ -27,7 +27,6 @@ class UsersController extends FOSRestController
             array('mobile_app_registration')
         );
 
-
         if (count($errors) > 0) {
             return $this->handleView(
                 new View($errors, Response::HTTP_BAD_REQUEST)
@@ -63,7 +62,7 @@ class UsersController extends FOSRestController
         return $this->handleView(
             new View(
                 array(
-                    "id" => $newUser->getId(),
+                    'id' => $newUser->getId(),
                 ),
                 Response::HTTP_ACCEPTED
             )
@@ -96,7 +95,7 @@ class UsersController extends FOSRestController
     }
 
     /**
-     * Request change user's email or phone
+     * Request change user's email or phone.
      *
      * @Annotations\Patch("/users/{id}/request-change-contact-info")
      */
@@ -123,6 +122,7 @@ class UsersController extends FOSRestController
         if (count($errors) === 0) {
             $this->sendTokenByEmail($contactInfo, $token);
             $this->get('fos_user.user_manager')->updateUser($user);
+
             return $this->handleView(new View());
         }
 
@@ -140,6 +140,7 @@ class UsersController extends FOSRestController
             // only if the user send us back the confirmation token
             $user->setPhoneNumber($oldPhoneNumber);
             $this->get('fos_user.user_manager')->updateUser($user);
+
             return $this->handleView(new View());
         }
 
@@ -152,7 +153,7 @@ class UsersController extends FOSRestController
     }
 
     /**
-     * change user's email or phone, with validation code received in previous step
+     * change user's email or phone, with validation code received in previous step.
      *
      * @Annotations\Patch("/users/{id}/contact-info")
      */
@@ -179,6 +180,7 @@ class UsersController extends FOSRestController
         if (count($errors) === 0) {
             $user->setEmail($contactInfo);
             $manager->updateUser($user);
+
             return $this->handleView(new View());
         }
 
@@ -190,6 +192,7 @@ class UsersController extends FOSRestController
         $errors = $validator->validate($user, ['phone_check']);
         if (count($errors) === 0) {
             $manager->updateUser($user);
+
             return $this->handleView(new View());
         }
 
@@ -203,7 +206,7 @@ class UsersController extends FOSRestController
 
     /**
      * Permit a user who has forgotten his password to request
-     * a validation to be sent to either his email or phone number
+     * a validation to be sent to either his email or phone number.
      *
      * @Annotations\Post("/users/forgot-password")
      */
@@ -237,6 +240,7 @@ class UsersController extends FOSRestController
         $user->setConfirmationToken($token);
 
         $this->get('fos_user.user_manager')->updateUser($user);
+
         return $this->handleView(
             new View(['id' => $user->getId()])
         );
@@ -244,7 +248,7 @@ class UsersController extends FOSRestController
 
     /**
      * Used for a user to reset his password if he's in possession
-     * of a validation code send to him during an earlier step
+     * of a validation code send to him during an earlier step.
      *
      * @param User    $user    the user who's reseting password
      * @param Request $request
@@ -274,9 +278,8 @@ class UsersController extends FOSRestController
      */
     public function putUserActivationCodeAction(User $user, $confirmationToken)
     {
-
         if ($user->getConfirmationToken() !== $confirmationToken) {
-            throw $this->createNotFoundException("No confirmation token invalid");
+            throw $this->createNotFoundException('No confirmation token invalid');
         }
 
         $user->setEnabled(true);
@@ -291,11 +294,10 @@ class UsersController extends FOSRestController
                 Response::HTTP_CREATED
             )
         );
-
-    } 
+    }
 
     /**
-     * TODO: move in User manager
+     * TODO: move in User manager.
      */
     private function findUserByEmail($email)
     {
@@ -305,7 +307,7 @@ class UsersController extends FOSRestController
     }
 
     /**
-     * TODO: move in User manager
+     * TODO: move in User manager.
      */
     private function findUserByPhoneNumber($phoneNumber)
     {
@@ -330,7 +332,6 @@ class UsersController extends FOSRestController
     }
 
     /**
-     * @return null
      */
     private function updateUserPassword(User $user, $newPassword)
     {
@@ -338,7 +339,7 @@ class UsersController extends FOSRestController
         $manager = $this->get('fos_user.user_manager');
         $manager->updateUser($user);
     }
-    
+
     /**
      * @return array
      */
@@ -354,19 +355,18 @@ class UsersController extends FOSRestController
                 throw new BadRequestHttpException($message);
             }
         }
+
         return $json;
     }
 
     /**
      * /!\ This method does not validate the input
      * making sure the email is a real email and phone is an actual phone
-     * is the responsability of the calling method
+     * is the responsability of the calling method.
      *
      * @param string|null $email if null, email not sent
      * @param string|null $phone if null, SMS not sent
      * @param string      $token token to send to the user
-     *
-     * @return void
      */
     private function sendToken(
         $email,

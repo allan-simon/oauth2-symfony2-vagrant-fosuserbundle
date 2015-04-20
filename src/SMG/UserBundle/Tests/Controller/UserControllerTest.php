@@ -5,7 +5,7 @@ namespace SMG\UserBundle\Tests\Controller;
 use SMG\UserBundle\Tests\TestHelpersTrait;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 
-class UsersControllerTest extends WebTestCase
+class UserControllerTest extends WebTestCase
 {
     use TestHelpersTrait;
 
@@ -17,7 +17,7 @@ class UsersControllerTest extends WebTestCase
     {
         $this->client = static::createClient();
         $fixtures = [
-            'SMG\UserBundle\DataFixtures\ORM\LoadUserData'
+            'SMG\UserBundle\DataFixtures\ORM\LoadUserData',
         ];
         $fixtureExecutor = $this->loadFixtures($fixtures);
         $this->em = $fixtureExecutor->getObjectManager();
@@ -128,8 +128,6 @@ class UsersControllerTest extends WebTestCase
         $this->assertUserCreated('new_user2');
     }
 
-
-
     public function testPost2UsersWithSameUsernameFail()
     {
         $userPayload = [
@@ -158,7 +156,7 @@ class UsersControllerTest extends WebTestCase
     {
         $payload = [
             'old_password' => 'plop',
-            'new_password' => 'toto'
+            'new_password' => 'toto',
         ];
         $this->givenUser('new-user');
         $this->performPatchUser(
@@ -172,7 +170,7 @@ class UsersControllerTest extends WebTestCase
     {
         $payload = [
             'old_password' => 'wrong_password',
-            'new_password' => 'toto'
+            'new_password' => 'toto',
         ];
         $this->givenUser('new-user');
         $this->performPatchUser(
@@ -225,7 +223,7 @@ class UsersControllerTest extends WebTestCase
 
     public function testPatchUserContactInfoWithValidEmailChangeUserEmail()
     {
-        $newEmail = "newemail@example.com";
+        $newEmail = 'newemail@example.com';
 
         $this->givenUser('user-with-confirmation-token');
         $this->performPatchUser(
@@ -242,7 +240,7 @@ class UsersControllerTest extends WebTestCase
 
     public function testPatchUserContactInfoWithValidPhoneChangeUserPhone()
     {
-        $newPhone = "789789";
+        $newPhone = '789789';
 
         $this->givenUser('user-with-confirmation-token');
         $this->performPatchUser(
@@ -259,7 +257,7 @@ class UsersControllerTest extends WebTestCase
 
     public function testPatchUserContactInfoWithInvalidValidationCodeBadRequest()
     {
-        $newPhone = "789789";
+        $newPhone = '789789';
 
         $this->givenUser('user-with-confirmation-token');
         $this->performPatchUser(
@@ -353,7 +351,6 @@ class UsersControllerTest extends WebTestCase
         $this->assertNotFoundError();
     }
 
-
     // conveniency methods
 
     private function performPostUser(array $userPayload)
@@ -375,7 +372,6 @@ class UsersControllerTest extends WebTestCase
             '/users/'.$this->user->getId().'/confirmation-token/'.$confirmationToken
         );
     }
-
 
     private function performPostUserForgotPassword(array $payload)
     {
@@ -409,7 +405,6 @@ class UsersControllerTest extends WebTestCase
             $jsonHeaders,
             $jsonBody
         );
-
     }
 
     private function findUserByUsername($username)
@@ -444,7 +439,6 @@ class UsersControllerTest extends WebTestCase
             $this->user->getEmail()
         );
     }
-
 
     private function givenUser($fixtureName)
     {

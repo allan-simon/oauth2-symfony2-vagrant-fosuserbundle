@@ -1,9 +1,9 @@
 <?php
+
 namespace SMG\UserBundle\Tests;
 
 trait TestHelpersTrait
 {
-
     private $client;
     private $em;
     private $currentUser;
@@ -71,7 +71,7 @@ trait TestHelpersTrait
             [],
             [
                 'HTTP_Authorization' => "Bearer {$username}",
-                'HTTP_ACCEPT' => 'application/json'
+                'HTTP_ACCEPT' => 'application/json',
             ]
         );
     }

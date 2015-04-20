@@ -29,7 +29,7 @@ class AccessToken extends BaseAccessToken
     protected $user;
 
     /**
-     * Return user identified by the token
+     * Return user identified by the token.
      *
      * @return SMG\UserBundle\Entity\User
      */
