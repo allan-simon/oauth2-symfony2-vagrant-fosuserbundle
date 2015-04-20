@@ -106,6 +106,30 @@ class UsersControllerTest extends WebTestCase
         $this->assertUserNotCreated('new_user_2');
     }
 
+    public function testPost2UsersWithOnlyPhoneButDifferentPhoneSuccess()
+    {
+        $userPayload = [
+            'phone_number' => '1234567',
+            'username' => 'new_user',
+            'plain_password' => 'new_password',
+        ];
+        $this->performPostUser($userPayload);
+        $this->assertAcceptedSuccess();
+        $this->assertUserCreated('new_user');
+
+        $secondUserPayload = [
+            'phone_number' =>  '7654321',
+            'username' => 'new_user_2',
+            'plain_password' => 'new_password_2',
+        ];
+
+        $this->performPostUser($secondUserPayload);
+        $this->assertAcceptedSuccess();
+        $this->assertUserCreated('new_user2');
+    }
+
+
+
     public function testPost2UsersWithSameUsernameFail()
     {
         $userPayload = [
