@@ -59,7 +59,7 @@ SMG\UserBundle\Entity\User:
                 message: fos_user.password.blank
                 groups: ['mobile_app_registration']
             - Length:
-                min: 2
+                min: 3
                 max: 4096
                 minMessage: fos_user.password.short
                 groups: ['mobile_app_registration']
