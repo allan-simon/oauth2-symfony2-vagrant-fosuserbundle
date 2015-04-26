@@ -49,6 +49,18 @@ class UserControllerTest extends WebTestCase
         $this->assertUserNotCreated('new_user');
     }
 
+    public function testPostUserCreateNewUserWithInvalidEmailFail()
+    {
+        $userPayload = [
+            'email' => 'not_a_valid_email',
+            'username' => 'new_user',
+            'plain_password' => 'new_password',
+        ];
+        $this->performPostUser($userPayload);
+        $this->assertBadRequestError();
+        $this->assertUserNotCreated('new_user');
+    }
+
     public function testPostUserCreateNewUserNormalizePhoneNumber()
     {
         $userPayload = [
