@@ -23,6 +23,7 @@ SMG\UserBundle\Entity\User:
         email:
             - Email:
                 message: fos_user.email.invalid
+                groups: ['with_email']
             - Length:
                 min: 5
                 minMessage: fos_user.email.short
