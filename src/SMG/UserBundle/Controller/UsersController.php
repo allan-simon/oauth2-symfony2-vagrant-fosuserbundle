@@ -175,7 +175,7 @@ class UsersController extends FOSRestController
         );
 
         if ($requestData['validation_code'] !== $user->getConfirmationToken()) {
-            throw new BadRequestHttpException();
+            throw new BadRequestHttpException('wrong validation code');
         }
 
         $contactInfo = $requestData['new_contact_info'];
@@ -188,6 +188,12 @@ class UsersController extends FOSRestController
 
         $errors = $validator->validateValue($contactInfo, $emailAssert);
         if (count($errors) === 0) {
+            $this->get('logger')->info(
+                'updated email of '.
+                $user->getId().
+                ' with '.
+                $contactInfo
+            );
             $user->setEmail($contactInfo);
             $manager->updateUser($user);
 
@@ -201,6 +207,12 @@ class UsersController extends FOSRestController
 
         $errors = $validator->validate($user, ['phone_check']);
         if (count($errors) === 0) {
+            $this->get('logger')->info(
+                'updated phone of '.
+                $user->getId().
+                ' with '.
+                $phoneNumber
+            );
             $manager->updateUser($user);
 
             return $this->handleView(new View());
