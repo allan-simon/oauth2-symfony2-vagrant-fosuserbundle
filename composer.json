@@ -78,6 +78,10 @@
                 "database_user": "APP_DB_USER_NAME",
                 "database_password": "APP_DB_USER_PASSWORD",
 
+                "sms_transport": "APP_SMS_TRANSPORT",
+                "sms_username": "APP_SMS_USERNAME",
+                "sms_password": "APP_SMS_PASSWORD",
+
                 "mailer_host": "APP_MAILER_HOST",
                 "mailer_user": "APP_MAILER_USER",
                 "mailer_password": "APP_MAILER_PASSWORD"
