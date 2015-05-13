@@ -86,7 +86,7 @@ class UserControllerTest extends WebTestCase
         $this->assertUserCreated('new_user');
 
         $secondUserPayload = [
-            'email' =>  $userPayload['email'],
+            'email' => $userPayload['email'],
             'username' => 'new_user_2',
             'plain_password' => 'new_password_2',
         ];
@@ -108,7 +108,7 @@ class UserControllerTest extends WebTestCase
         $this->assertUserCreated('new_user');
 
         $secondUserPayload = [
-            'phone_number' =>  $userPayload['phone_number'],
+            'phone_number' => $userPayload['phone_number'],
             'username' => 'new_user_2',
             'plain_password' => 'new_password_2',
         ];
@@ -130,7 +130,7 @@ class UserControllerTest extends WebTestCase
         $this->assertUserCreated('new_user');
 
         $secondUserPayload = [
-            'phone_number' =>  '7654321',
+            'phone_number' => '7654321',
             'username' => 'new_user_2',
             'plain_password' => 'new_password_2',
         ];
@@ -152,7 +152,7 @@ class UserControllerTest extends WebTestCase
         $this->assertUserCreated('new_user');
 
         $secondUserPayload = [
-            'phone_number' =>  '432434243',
+            'phone_number' => '432434243',
             'username' => 'New_user',
             'plain_password' => 'new_password_2',
         ];
