@@ -91,6 +91,8 @@ fos_user:
     db_driver: orm 
     firewall_name: main
     user_class: SMG\UserBundle\Entity\User
+    service:
+        user_manager: custom_user_manager
 
 fos_rest:
     routing_loader:
@@ -114,3 +116,13 @@ cspoo_sms:
             type: %sms_transport%
             username: %sms_username%
             password: %sms_password%
+
+services:
+    custom_user_manager:
+        class: SMG\UserBundle\Manager\UserManager
+        arguments:
+            - @security.encoder_factory
+            - @fos_user.util.username_canonicalizer
+            - @fos_user.util.email_canonicalizer
+            - @fos_user.entity_manager
+            - %fos_user.model.user.class%
