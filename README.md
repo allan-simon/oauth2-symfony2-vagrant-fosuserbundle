@@ -176,6 +176,18 @@ possible value for message:
   * `fos_user.password.blank`:  the password has not been precised by user.
   * `fos_user.password.short`:  the password is too short ( < 3 characters)
 
+### Note:
+
+In order to avoid a user getting "locked" in the following situation:
+
+  1. the user register using phone A
+  2. before getting the validation code, the user closes the App AND for some reason never get the validation phone
+
+which would result in the user's email or phone number being marked as used by the system but enable to be used by the user.
+In order to avoid that, if you register twice with the same credentials, without activitating the first time, the system
+will accept the second registration and delete the first one.
+
+
 ## Get an authorization token with grant type *password*
 
 run this HTTP request

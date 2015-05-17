@@ -74,7 +74,7 @@ class UserControllerTest extends WebTestCase
         $this->assertUserWithNameHasPhoneEquals('new_user', '004212345');
     }
 
-    public function testPost2UsersWithSameEmailFail()
+    public function testPost2UsersWithSameEmailDeleteFirstOne()
     {
         $userPayload = [
             'email' => 'plop@plop.com',
@@ -92,11 +92,35 @@ class UserControllerTest extends WebTestCase
         ];
 
         $this->performPostUser($secondUserPayload);
+        $this->assertAcceptedSuccess();
+        $this->assertUserNotCreated('new_user');
+        $this->assertUserCreated('new_user_2');
+    }
+
+    public function testPost2UsersWithSameEmailFailIfAlreadyEnabled()
+    {
+        $userPayload = [
+            'email' => 'plop@plop.com',
+            'username' => 'new_user',
+            'plain_password' => 'new_password',
+        ];
+        $this->performPostUser($userPayload);
+        $this->assertAcceptedSuccess();
+        $this->assertUserCreated('new_user');
+        $this->enableUser('new_user');
+
+        $secondUserPayload = [
+            'email' => $userPayload['email'],
+            'username' => 'new_user_2',
+            'plain_password' => 'new_password_2',
+        ];
+
+        $this->performPostUser($secondUserPayload);
         $this->assertBadRequestError();
         $this->assertUserNotCreated('new_user_2');
     }
 
-    public function testPost2UsersWithSamePhoneFail()
+    public function testPost2UsersWithSamePhoneDeleteFirstOne()
     {
         $userPayload = [
             'phone_number' => '1234567',
@@ -114,6 +138,32 @@ class UserControllerTest extends WebTestCase
         ];
 
         $this->performPostUser($secondUserPayload);
+
+        $this->assertAcceptedSuccess();
+        $this->assertUserNotCreated('new_user');
+        $this->assertUserCreated('new_user_2');
+    }
+
+    public function testPost2UsersWithSamePhoneFailIfAlreadyEnabled()
+    {
+        $userPayload = [
+            'phone_number' => '1234567',
+            'username' => 'new_user',
+            'plain_password' => 'new_password',
+        ];
+        $this->performPostUser($userPayload);
+        $this->assertAcceptedSuccess();
+        $this->assertUserCreated('new_user');
+        $this->enableUser('new_user');
+
+        $secondUserPayload = [
+            'phone_number' => $userPayload['phone_number'],
+            'username' => 'new_user_2',
+            'plain_password' => 'new_password_2',
+        ];
+
+        $this->performPostUser($secondUserPayload);
+
         $this->assertBadRequestError();
         $this->assertUserNotCreated('new_user_2');
     }
@@ -434,6 +484,15 @@ class UserControllerTest extends WebTestCase
     {
         return $this->em->getRepository('SMGUserBundle:User')->findOneByUsername($username);
     }
+
+    private function enableUser($username)
+    {
+        $user = $this->findUserByUsername($username);
+        $user->setEnabled(true);
+        $this->em->persist($user);
+        $this->em->flush();
+    }
+
     private function assertUserWithNameHasPhoneEquals($username, $phone)
     {
         $user = $this->findUserByUsername($username);
