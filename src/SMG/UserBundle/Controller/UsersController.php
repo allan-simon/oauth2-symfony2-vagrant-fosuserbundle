@@ -21,22 +21,7 @@ class UsersController extends FOSRestController
      */
     public function postUsersAction(User $user)
     {
-        $validationRules = array('mobile_app_registration');
-
-        if (!is_null($user->getEmail())) {
-            $validationRules[] = 'with_email';
-        }
-
-        if (!is_null($user->getPhoneNumber())) {
-            $validationRules[] = 'with_phone';
-        }
-
-        $validator = $this->container->get('validator');
-        $errors = $validator->validate(
-            $user,
-            $validationRules
-        );
-
+        $errors = $this->validates($user);
         if (count($errors) > 0) {
             return $this->handleView(
                 new View($errors, Response::HTTP_BAD_REQUEST)
@@ -241,15 +226,12 @@ class UsersController extends FOSRestController
 
         $contactInfo = $requestData['contact_info'];
 
-        $userByEmail = $this->findUserByEmail($contactInfo);
-        $userByPhone = $this->findUserByPhoneNumber($contactInfo);
-        $user = (
-            $userByEmail !== null ?
-            $userByEmail :
-            $userByPhone
-        );
+        $manager = $this->get('fos_user.user_manager');
 
-        if ($userByEmail === null && $userByPhone === null) {
+        // it will check also email and phone number
+        $user = $manager->loadUserByUsername($contactInfo);
+
+        if (is_null($user)) {
             throw $this->createNotFoundException();
         }
 
@@ -261,7 +243,7 @@ class UsersController extends FOSRestController
         );
         $user->setConfirmationToken($token);
 
-        $this->get('fos_user.user_manager')->updateUser($user);
+        $manager->updateUser($user);
 
         return $this->handleView(
             new View(['id' => $user->getId()])
@@ -338,26 +320,6 @@ class UsersController extends FOSRestController
     }
 
     /**
-     * TODO: move in User manager.
-     */
-    private function findUserByEmail($email)
-    {
-        return $this->getDoctrine()
-            ->getRepository('SMGUserBundle:User')
-            ->findOneByEmail($email);
-    }
-
-    /**
-     * TODO: move in User manager.
-     */
-    private function findUserByPhoneNumber($phoneNumber)
-    {
-        return $this->getDoctrine()
-            ->getRepository('SMGUserBundle:User')
-            ->findOneByPhoneNumber($phoneNumber);
-    }
-
-    /**
      * @return bool
      */
     private function isPasswordCorrect(User $user, $password)
@@ -421,6 +383,31 @@ class UsersController extends FOSRestController
         if (!empty($phone)) {
             $this->sendTokenByPhone($phone, $token);
         }
+    }
+
+    /**
+     * Check if the information in $user is enough and valid to create a new User
+     * in database.
+     */
+    private function validates($user)
+    {
+        $validationRules = array('mobile_app_registration');
+
+        if (!is_null($user->getEmail())) {
+            $validationRules[] = 'with_email';
+        }
+
+        if (!is_null($user->getPhoneNumber())) {
+            $validationRules[] = 'with_phone';
+        }
+
+        $validator = $this->container->get('validator');
+        $errors = $validator->validate(
+            $user,
+            $validationRules
+        );
+
+        return $errors;
     }
 
     /**
