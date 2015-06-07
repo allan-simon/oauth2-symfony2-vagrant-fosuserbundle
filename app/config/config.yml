@@ -85,6 +85,7 @@ fos_oauth_server:
         user_provider: fos_user.user_manager
         options:
             supported_scopes: user
+            access_token_lifetime: '%access_token_lifetime%'
 
 
 fos_user:

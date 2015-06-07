@@ -22,3 +22,6 @@ parameters:
     sms_transport: winic
     sms_username: replaceme
     sms_password: replaceme
+
+    # access token life time
+    access_token_lifetime: 172800 #48 hours
