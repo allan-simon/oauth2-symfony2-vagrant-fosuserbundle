@@ -25,6 +25,7 @@ class AccessToken extends BaseAccessToken
 
     /**
      * @ORM\ManyToOne(targetEntity="SMG\UserBundle\Entity\User")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $user;
 
