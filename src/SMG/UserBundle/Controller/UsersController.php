@@ -435,9 +435,11 @@ class UsersController extends FOSRestController
     {
         $smsSender = $this->container->get('sms');
         $sms = $smsSender->createSms($phone, $token);
-        $this->get('logger')->info(
-            "sms token $token send to phone $phone, info : $sms[0]"
-        );
+        $result = $smsSender->sendSms($sms);
+        $this->get('logger')->info("sms token $token send to phone $phone");
+        if (is_array($result)) {
+            $this->get('logger')->info($result[0]);
+        }
     }
 
     private function generateToken()
