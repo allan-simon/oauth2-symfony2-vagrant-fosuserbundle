@@ -267,7 +267,8 @@ echo '
 ```
 echo '
 {
-    "new_contact_info" : "NEW_EMAIL_OR_PHONE_NUMBER"
+    "new_contact_info" : "NEW_EMAIL_OR_PHONE_NUMBER",
+    'password' : 'PLAIN_TEXT_PASSWORD'
 }
 ' |  http PATCH http://127.0.0.1:8089/app_dev.php/users/{id}/request-change-contact-info
 

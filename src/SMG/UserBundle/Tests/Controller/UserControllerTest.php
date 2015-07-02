@@ -249,7 +249,7 @@ class UserControllerTest extends WebTestCase
         $this->givenUser('user-without-confirmation-token');
         $this->performPatchUser(
             '/request-change-contact-info',
-            ['new_contact_info' => 'newemail@example.com']
+            ['new_contact_info' => 'newemail@example.com', 'password' => 'plop']
         );
         $this->assertNoContentResponse();
         $this->assertEmailEquals($this->userOriginalEmail);
@@ -262,7 +262,7 @@ class UserControllerTest extends WebTestCase
         $this->givenUser('user-without-confirmation-token');
         $this->performPatchUser(
             '/request-change-contact-info',
-            ['new_contact_info' => '7891234']
+            ['new_contact_info' => '7891234', 'password' => 'plop']
         );
         $this->assertNoContentResponse();
         $this->assertEmailEquals($this->userOriginalEmail);
@@ -275,9 +275,31 @@ class UserControllerTest extends WebTestCase
         $this->givenUser('user-without-confirmation-token');
         $this->performPatchUser(
             '/request-change-contact-info',
+            ['new_contact_info' => 'wrong input', 'password' => 'plop']
+        );
+        $this->assertBadRequestError();
+        $this->assertUserHasNoConfirmationTokenSet();
+    }
+
+    public function testPatchUserRequestChangeInfoWithoutPasswordBadRequest()
+    {
+        $this->givenUser('user-without-confirmation-token');
+        $this->performPatchUser(
+            '/request-change-contact-info',
             ['new_contact_info' => 'wrong input']
         );
         $this->assertBadRequestError();
+        $this->assertUserHasNoConfirmationTokenSet();
+    }
+
+    public function testPatchUserRequestChangeInfoWithWrongPasswordPermissionDenied()
+    {
+        $this->givenUser('user-without-confirmation-token');
+        $this->performPatchUser(
+            '/request-change-contact-info',
+            ['new_contact_info' => 'correct@example.com', 'password' => 'wrong password']
+        );
+        $this->assertPermissionDenied();
         $this->assertUserHasNoConfirmationTokenSet();
     }
 

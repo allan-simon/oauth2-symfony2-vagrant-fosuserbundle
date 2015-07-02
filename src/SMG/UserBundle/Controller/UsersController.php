@@ -104,8 +104,17 @@ class UsersController extends FOSRestController
     ) {
         $requestData = $this->requestIsJsonWithKeysOrThrow(
             $request,
-            ['new_contact_info']
+            ['new_contact_info', 'password']
         );
+
+        if ($this->isPasswordCorrect($user, $requestData['password'])) {
+            return $this->handleView(
+                new View(
+                    ['message' => 'bst.password.wrong'],
+                    Response::HTTP_FORBIDDEN
+                )
+            );
+        }
 
         $contactInfo = $requestData['new_contact_info'];
 
