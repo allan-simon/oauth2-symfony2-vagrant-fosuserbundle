@@ -11,9 +11,12 @@ use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\View\View;
 use Symfony\Component\Validator\Constraints as Assert;
 use SMG\UserBundle\Entity\User;
+use SMG\ManagerBundle\Controller\Traits\HandleUserTrait;
 
 class UsersController extends FOSRestController
 {
+    use HandleUserTrait;
+
     const TOKEN_DIGITS = 6;
     /**
      * @Annotations\Post("/users")
@@ -396,31 +399,6 @@ class UsersController extends FOSRestController
         if (!empty($phone)) {
             $this->sendTokenByPhone($phone, $token);
         }
-    }
-
-    /**
-     * Check if the information in $user is enough and valid to create a new User
-     * in database.
-     */
-    private function validates($user)
-    {
-        $validationRules = array('mobile_app_registration');
-
-        if (!is_null($user->getEmail())) {
-            $validationRules[] = 'with_email';
-        }
-
-        if (!is_null($user->getPhoneNumber())) {
-            $validationRules[] = 'with_phone';
-        }
-
-        $validator = $this->container->get('validator');
-        $errors = $validator->validate(
-            $user,
-            $validationRules
-        );
-
-        return $errors;
     }
 
     /**

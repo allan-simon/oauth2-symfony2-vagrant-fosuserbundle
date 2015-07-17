@@ -28,6 +28,12 @@ class CreateClientCommand extends ContainerAwareCommand
                 'Sets allowed grant type for client. Use this option multiple times to set multiple grant types..',
                 null
             )
+            ->addOption(
+                'client-type',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Set type of client. Use this option to know from which client an user token comes from and assign privileges to this user.'
+            )
             ->setHelp(
                 <<<EOT
                     The <info>%command.name%</info>command creates a new client.
@@ -44,6 +50,7 @@ EOT
         $client = $clientManager->createClient();
         $client->setRedirectUris($input->getOption('redirect-uri'));
         $client->setAllowedGrantTypes($input->getOption('grant-type'));
+        $client->setType($input->getOption('client-type'));
         $clientManager->updateClient($client);
         $output->writeln(
             sprintf(

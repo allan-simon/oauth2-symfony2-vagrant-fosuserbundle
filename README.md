@@ -52,8 +52,14 @@ php app/console  doctrine:migrations:migrate
 in the vagrant machine (in directory `/vagrant` ) run: (in case you want to use the grant type `password`)
 
 ```
-php app/console acme:oauth-server:client:create --grant-type="password" --grant-type="refresh_token" --grant-type="token"
+php app/console acme:oauth-server:client:create \
+--grant-type="password" \
+--grant-type="refresh_token" \
+--grant-type="token" \
+--client-type="backend"
 ```
+
+The `client-type` parameter is optional, the given value is used to specified the type of the client we create. This is a walk around as we cannot use the "scopes" feature provided by oauth2. In the bundle we use, this feature is not available from the client.
 
 it will return you:
 
@@ -187,6 +193,38 @@ which would result in the user's email or phone number being marked as used by t
 In order to avoid that, if you register twice with the same credentials, without activitating the first time, the system
 will accept the second registration and delete the first one.
 
+## Create a new user by using an existing user account
+
+One user connected through the backend client is allowed to create other users.
+
+```
+echo '
+{
+    "email": "TEST@EXAMPLE.COM" ,
+    "username" : "USER_NAME",
+    "plain_password" : "PLAIN_TEXT_PASSWORD",
+    "roles": ["ROLE_1", "ROLE_2"]
+}
+' |  http POST http://127.0.0.1:8089/app_dev.php/admin/users 'Authorization:Bearer {accessToken}'
+```
+
+This API call throws an access denied exception if the user is not allowed to create another user.
+
+If everything is made correctly you should get back this
+
+```
+HTTP/1.1 201 Created
+Cache-Control: no-cache
+Connection: Kepp-alive
+Content-Type: application/json
+Date: XXX
+Server: XXXX
+Transfer-Encoding: chunked
+
+{
+    "id": 5
+}
+```
 
 ## Get an authorization token with grant type *password*
 
