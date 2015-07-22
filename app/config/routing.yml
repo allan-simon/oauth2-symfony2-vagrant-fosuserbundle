@@ -1,3 +1,6 @@
+managers:
+    resource: "@SMGManagerBundle/Resources/config/routing.yml"
+
 smg_oauth:
     resource: "@SMGOauthBundle/Resources/config/routing.yml"
     prefix:   /

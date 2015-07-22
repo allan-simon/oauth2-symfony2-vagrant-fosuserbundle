@@ -17,8 +17,37 @@ class Client extends BaseClient
      */
     protected $id;
 
+    /**
+     * @ORM\Column(type="string")
+     */
+    public $type;
+
     public function __construct()
     {
         parent::__construct();
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Check if the given client type is the same as the current user.
+     *
+     * @param string $typeToCheck client type to check
+     *
+     * @return boolean
+     */
+    public function isTypeEqualsTo($typeToCheck)
+    {
+        return $this->getType() === $typeToCheck;
     }
 }

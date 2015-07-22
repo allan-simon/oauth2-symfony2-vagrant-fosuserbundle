@@ -24,6 +24,7 @@ class AppKernel extends Kernel
             new cspoo\SmsBundle\cspooSmsBundle(),
             new SMG\OauthBundle\SMGOauthBundle(),
             new SMG\UserBundle\SMGUserBundle(),
+            new SMG\ManagerBundle\SMGManagerBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
