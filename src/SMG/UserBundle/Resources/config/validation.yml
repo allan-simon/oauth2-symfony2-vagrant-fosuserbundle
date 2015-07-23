@@ -17,7 +17,7 @@ SMG\UserBundle\Entity\User:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: phoneNumber
             message: bst.phonenumber.already_used
-            groups: ['with_phone']
+            groups: ['with_phone', 'phone_check']
 
     properties:
         email:
