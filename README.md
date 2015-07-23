@@ -30,6 +30,7 @@ for windows user you can have a nfs using this plugin
 vagrant plugin install vagrant-winnfsd
 ```
 
+
 # Create the vagrant machine
 
 ```
@@ -193,7 +194,15 @@ which would result in the user's email or phone number being marked as used by t
 In order to avoid that, if you register twice with the same credentials, without activitating the first time, the system
 will accept the second registration and delete the first one.
 
-## Create a new user by using an existing user account
+## Backend API calls
+
+These API calls can only be executed by an user connected through a "backend" type client. All these calls will throw access denied exception if the current user is not allowed to perform them.
+
+- POST /admin/users - Create a new user
+- PUT /admin/users - Edit an user
+- PATCH /admin/users/{id}/disable - Disable an user
+
+### POST /admin/users - Create an user
 
 One user connected through the backend client is allowed to create other users.
 
@@ -208,14 +217,12 @@ echo '
 ' |  http POST http://127.0.0.1:8089/app_dev.php/admin/users 'Authorization:Bearer {accessToken}'
 ```
 
-This API call throws an access denied exception if the user is not allowed to create another user.
-
 If everything is made correctly you should get back this
 
 ```
 HTTP/1.1 201 Created
 Cache-Control: no-cache
-Connection: Kepp-alive
+Connection: Keep-Alive
 Content-Type: application/json
 Date: XXX
 Server: XXXX
@@ -224,6 +231,56 @@ Transfer-Encoding: chunked
 {
     "id": 5
 }
+```
+
+### PUT /admin/users/{id} - Edit an user
+
+One user connected through the backend client is allowed to edit an user.
+
+```
+echo '
+{
+    "email": "TEST@EXAMPLE.COM" ,
+    "username" : "USER_NAME",
+    "phone_number" : "12345",
+    "roles": ["ROLE_1", "ROLE_2"]
+}
+' |  http PUT http://127.0.0.1:8089/app_dev.php/admin/users/{id} 'Authorization:Bearer {accessToken}'
+```
+
+If everything is made correctly you should get back this
+
+```
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Connection: Keep-Alive
+Content-Type: application/json
+Date: XXX
+Server: XXXX
+Transfer-Encoding: chunked
+
+{
+    "id": 5
+}
+```
+
+### PATCH /admin/users/{id}/disable - Disable an user
+
+One user connected through the backend client is allowed to disable other users.
+
+```
+http PATCH http://127.0.0.1:8089/app_dev.php/admin/users/{id}/disable 'Authorization:Bearer {accessToken}'
+```
+
+If everything is made correctly you should get back this
+
+```
+HTTP/1.1 204 No Content
+Cache-Control: no-cache
+Connection: Keep-Alive
+Content-Type: text/html
+Date: XXX
+Server: XXXX
 ```
 
 ## Get an authorization token with grant type *password*

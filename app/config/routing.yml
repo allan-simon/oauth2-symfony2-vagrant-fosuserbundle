@@ -1,4 +1,6 @@
 managers:
+    type: rest
+    prefix: /admin
     resource: "@SMGManagerBundle/Resources/config/routing.yml"
 
 smg_oauth:
