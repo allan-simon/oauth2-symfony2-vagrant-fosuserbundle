@@ -283,6 +283,25 @@ Date: XXX
 Server: XXXX
 ```
 
+### PATCH /admin/users/{id}/enable - Enable an user
+
+One user connected through the backend client is allowed to enable other users.
+
+```
+http PATCH http://127.0.0.1:8089/app_dev.php/admin/users/{id}/enable 'Authorization:Bearer {accessToken}'
+```
+
+If everything is made correctly you should get back this
+
+```
+HTTP/1.1 204 No Content
+Cache-Control: no-cache
+Connection: Keep-Alive
+Content-Type: text/html
+Date: XXX
+Server: XXXX
+```
+
 ## Get an authorization token with grant type *password*
 
 run this HTTP request
