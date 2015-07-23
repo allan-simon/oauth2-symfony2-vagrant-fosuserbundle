@@ -1,3 +1,4 @@
 managers:
     resource: SMG\ManagerBundle\Controller\ManagersController
     type:     rest
+    name_prefix: admin_

@@ -27,7 +27,10 @@ class UsersController extends FOSRestController
         $manager = $this->get('fos_user.user_manager');
 
         $token = $manager->deleteIfNonEnabledExists($user);
-        $errors = $this->validates($user);
+        $errors = $this->validates(
+            $user,
+            'mobile_app_registration'
+        );
         if (count($errors) > 0) {
             return $this->handleView(
                 new View($errors, Response::HTTP_BAD_REQUEST)
@@ -50,6 +53,7 @@ class UsersController extends FOSRestController
         $newUser->setEmail($email);
         $newUser->setPlainPassword($user->getPlainPassword());
         $newUser->setRoles(array('ROLE_USER'));
+
 
         if (is_null($token)) {
             $token = $this->generateToken();

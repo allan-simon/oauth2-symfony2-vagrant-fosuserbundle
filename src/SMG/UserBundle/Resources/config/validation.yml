@@ -3,7 +3,7 @@ SMG\UserBundle\Entity\User:
         - Expression:
             expression: "this.getEmail() != '' or this.getPhoneNumber() != ''"
             message: bst.phone_and_email.missing
-            groups: ['mobile_app_registration']
+            groups: ['mobile_app_registration', 'backend_user_edit']
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: emailCanonical
             errorPath: email
@@ -13,7 +13,7 @@ SMG\UserBundle\Entity\User:
             fields: usernameCanonical
             errorPath: username
             message: fos_user.username.already_used
-            groups: ['mobile_app_registration']
+            groups: ['mobile_app_registration', 'backend_user_edit']
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: phoneNumber
             message: bst.phonenumber.already_used
@@ -36,10 +36,10 @@ SMG\UserBundle\Entity\User:
                 minMessage: fos_user.username.short
                 max: 255
                 maxMessage: fos_user.username.long
-                groups: ['mobile_app_registration']
+                groups: ['mobile_app_registration', 'backend_user_edit']
             - NotBlank:
                 message: fos_user.username.blank
-                groups: ['mobile_app_registration']
+                groups: ['mobile_app_registration', 'backend_user_edit']
         phoneNumber:
             - Length:
                 min: 3

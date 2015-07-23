@@ -18,10 +18,10 @@ class ManagersController extends FOSRestController
     /**
      * NOTE: use annotation for routing here even
      * if the FOSRestBundle is automatically able
-     * to handle them. In fact, ParamConverter is 
+     * to handle them. In fact, ParamConverter is
      * not supported by FOSRestController.
      *
-     * @Annotations\Post("/admin/users")
+     * @Annotations\Post("/users")
      * @ParamConverter("user", converter="fos_rest.request_body")
      */
     public function postUserAction(User $user)
@@ -33,7 +33,13 @@ class ManagersController extends FOSRestController
         $manager = $this->get('fos_user.user_manager');
         $manager->deleteIfNonEnabledExists($user);
 
-        $errors = $this->validates($user);
+        //TODO: 16 - use the mobile_app_registration
+        //group for now, but should be renamed
+        //for the backend
+        $errors = $this->validates(
+            $user,
+            'mobile_app_registration'
+        );
         if (count($errors) > 0) {
             return $this->handleView(
                 new View($errors, Response::HTTP_BAD_REQUEST)
@@ -43,14 +49,12 @@ class ManagersController extends FOSRestController
         $newUser = $manager->createUser();
 
         $phoneNumber = $user->getPhoneNumber();
-        $email = $user->getEmail();
-
         if (!is_null($phoneNumber)) {
             $phoneNumber = str_replace('+', '00', $phoneNumber);
         }
 
         $newUser->setPhoneNumber($phoneNumber);
-        $newUser->setEmail($email);
+        $newUser->setEmail($user->getEmail());
         $newUser->setUsername($user->getUsername());
         $newUser->setPlainPassword($user->getPlainPassword());
         $newUser->setRoles($user->getRoles());
@@ -66,5 +70,62 @@ class ManagersController extends FOSRestController
                 Response::HTTP_CREATED
             )
         );
+    }
+
+    /**
+     * @Annotations\Put("/users/{id}")
+     *
+     * @ParamConverter("updatedUser", converter="fos_rest.request_body")
+     *
+     * @param User $user
+     * @param User $updatedUser
+     */
+    public function putUserAction(
+        User $user,
+        User $updatedUser
+    ) {
+        $this->throwIfClientNot('backend');
+
+        $errors = $this->validates(
+            $updatedUser,
+            'backend_user_edit'
+        );
+        if (count($errors) > 0) {
+            return $this->handleView(
+                new View($errors, Response::HTTP_BAD_REQUEST)
+            );
+        }
+
+        $user->setUsername($updatedUser->getUsername());
+        $user->setEmail($updatedUser->getEmail());
+        $user->setPhoneNumber($updatedUser->getPhoneNumber());
+        $user->setRoles($updatedUser->getRoles());
+
+        $this->get('fos_user.user_manager')->updateUser($user);
+
+        return $this->handleView(
+            new View(
+                array(
+                    'id' => $user->getId()
+                ),
+                Response::HTTP_OK
+            )
+        );
+    }
+
+    /**
+     * Disable one given user.
+     *
+     * @param User $user
+     */
+    public function patchUserDisableAction(User $user) {
+
+        $this->throwIfClientNot('backend');
+
+        $user->setEnabled(false);
+
+        $this->get('fos_user.user_manager')->updateUser($user);
+
+        return $this->handleView(new View());
     }
 }
