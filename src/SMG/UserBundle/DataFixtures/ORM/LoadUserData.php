@@ -30,6 +30,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $u2->setEmail('raphael@example.com');
         $u2->setPlainPassword('plop');
         $u2->setRoles(array('ROLE_USER'));
+        $u2->setPhoneNumber('123456789');
         $u2->setConfirmationToken('');
         $u2->setEnabled(true);
         $u2->setLocked(false);

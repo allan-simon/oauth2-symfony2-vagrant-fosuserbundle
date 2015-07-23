@@ -303,6 +303,20 @@ class UserControllerTest extends WebTestCase
         $this->assertUserHasNoConfirmationTokenSet();
     }
 
+    public function testPathUserRequestChangeInfoWithAlreadyUsedPhoneNumberBadRequest()
+    {
+        $otherUser = $this->fixtures->getReference('user-without-confirmation-token');
+        $this->givenUser('user-with-confirmation-token');
+        $this->performPatchUser(
+            '/request-change-contact-info',
+            [
+                'new_contact_info' => $otherUser->getPhoneNumber(),
+                'password' => 'plop',
+            ]
+        );
+        $this->assertBadRequestError();
+    }
+
     // Tests for PATCH /users/{}/contact-info
 
     public function testPatchUserContactInfoWithValidEmailChangeUserEmail()
@@ -369,6 +383,20 @@ class UserControllerTest extends WebTestCase
         $this->assertBadRequestError();
         $this->assertEmailEquals($this->userOriginalEmail);
         $this->assertPhoneEquals($this->userOriginalPhoneNumber);
+    }
+
+    public function testPatchUserWithAlreadyUsedPhoneNumberBadRequest()
+    {
+        $otherUser = $this->fixtures->getReference('user-without-confirmation-token');
+        $this->givenUser('user-with-confirmation-token');
+        $this->performPatchUser(
+            '/contact-info',
+            [
+                'new_contact_info' => $otherUser->getPhoneNumber(),
+                'validation_code' => $this->user->getConfirmationToken(),
+            ]
+        );
+        $this->assertBadRequestError();
     }
 
     // Tests for POST /users/forgot-password
