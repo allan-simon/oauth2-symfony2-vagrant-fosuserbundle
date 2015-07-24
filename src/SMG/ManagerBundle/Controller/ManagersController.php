@@ -114,18 +114,26 @@ class ManagersController extends FOSRestController
     }
 
     /**
-     * Disable one given user.
-     *
      * @param User $user
      */
-    public function patchUserDisableAction(User $user) {
-
+    public function patchUserDisableAction(User $user)
+    {
         $this->throwIfClientNot('backend');
 
         $user->setEnabled(false);
 
         $this->get('fos_user.user_manager')->updateUser($user);
+    }
 
-        return $this->handleView(new View());
+    /**
+     * @param User $user
+     */
+    public function patchUserEnableAction(User $user)
+    {
+        $this->throwIfClientNot('backend');
+
+        $user->setEnabled(true);
+
+        $this->get('fos_user.user_manager')->updateUser($user);
     }
 }
