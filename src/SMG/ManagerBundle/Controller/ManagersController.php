@@ -120,18 +120,7 @@ class ManagersController extends FOSRestController
     {
         $this->throwIfClientNot('backend');
 
-        return $this->handleView(
-            new View(
-                array(
-                    'id' => $user->getId(),
-                    'username' => $user->getUsername(),
-                    'email' => $user->getEmail(),
-                    'phone_number' => $user->getPhoneNumber(),
-                    'roles' => $user->getRoles()
-                ),
-                Response::HTTP_OK
-            )
-        );
+        return $user;
     }
 
     /**
