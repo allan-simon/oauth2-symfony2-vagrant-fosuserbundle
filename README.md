@@ -201,6 +201,7 @@ These API calls can only be executed by an user connected through a "backend" ty
 - POST /admin/users - Create a new user
 - PUT /admin/users - Edit an user
 - PATCH /admin/users/{id}/disable - Disable an user
+- GET /admin/users/{id} - Get one user information
 
 ### POST /admin/users - Create an user
 
@@ -261,6 +262,36 @@ Transfer-Encoding: chunked
 
 {
     "id": 5
+}
+```
+
+### GET /admin/users/{id} - Get an user information
+
+One user connected through the backend client is allowed to check other user information.
+
+```
+http GET http://127.0.0.1:8089/app_dev.php/admin/users/{id} 'Authorization:Bearer {accessToken}'
+```
+
+If everything is made correctly you should get back this
+
+```
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Connection: Keep-Alive
+Content-Type: application/json
+Keep-Alive: XXXX
+Date: XXX
+Server: XXXX
+
+{
+    "email": "test@test.com",
+    "id": 15,
+    "phone_number": "123456789",
+    "roles": [
+        "ROLE_USER"
+    ],
+    "username": "Allan"
 }
 ```
 

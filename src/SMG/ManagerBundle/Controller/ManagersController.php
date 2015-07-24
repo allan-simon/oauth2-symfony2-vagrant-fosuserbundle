@@ -116,6 +116,18 @@ class ManagersController extends FOSRestController
     /**
      * @param User $user
      */
+    public function getUserAction(User $user)
+    {
+        $this->throwIfClientNot('backend');
+
+        return $user;
+    }
+
+    /**
+     * Disable one given user.
+     *
+     * @param User $user
+     */
     public function patchUserDisableAction(User $user)
     {
         $this->throwIfClientNot('backend');
