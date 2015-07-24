@@ -364,6 +364,10 @@ class UsersController extends FOSRestController
     }
 
     /**
+     * Check if the JSON sent data is correct
+     * for the current called action
+     * and throws a bad request exception if the input is wrong.
+     *
      * @return array
      */
     private function requestIsJsonWithKeysOrThrow(
