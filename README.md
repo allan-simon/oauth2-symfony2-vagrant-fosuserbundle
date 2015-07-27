@@ -199,9 +199,10 @@ will accept the second registration and delete the first one.
 These API calls can only be executed by an user connected through a "backend" type client. All these calls will throw access denied exception if the current user is not allowed to perform them.
 
 - POST /admin/users - Create a new user
-- PUT /admin/users - Edit an user
-- PATCH /admin/users/{id}/disable - Disable an user
+- PUT /admin/users/{id} - Edit an user
+- PUT /admin/users/{id}/roles - Edit the roles of an user
 - GET /admin/users/{id} - Get one user information
+- PATCH /admin/users/{id}/disable - Disable an user
 
 ### POST /admin/users - Create an user
 
@@ -263,6 +264,28 @@ Transfer-Encoding: chunked
 {
     "id": 5
 }
+```
+
+### PUT /admin/users/{id}/roles - Edit the roles of an user
+
+One user connected through the backend client is allowed to edit the roles of an user.
+
+```
+echo '
+    ["ROLE_1", "ROLE_2"]
+' |  http PUT http://127.0.0.1:8089/app_dev.php/admin/users/{id}/roles 'Authorization:Bearer {accessToken}'
+```
+
+If everything is made correctly you should get back this
+
+```
+HTTP/1.1 204 No content
+Cache-Control: no-cache
+Connection: Keep-Alive
+Content-Type: text/html
+Date: XXX
+Server: XXXX
+Keep-Alive: XXXX
 ```
 
 ### GET /admin/users/{id} - Get an user information

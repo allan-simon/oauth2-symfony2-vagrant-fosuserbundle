@@ -8,6 +8,7 @@ use SMG\UserBundle\Entity\User;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class ManagersController extends FOSRestController
@@ -111,6 +112,23 @@ class ManagersController extends FOSRestController
                 Response::HTTP_OK
             )
         );
+    }
+
+    /**
+     * @param User $user
+     * @param Request $request
+     */
+    public function putUserRolesAction(
+        User $user,
+        Request $request
+    ) {
+        $this->throwIfClientNot('backend');
+
+        $roles = json_decode($request->getContent(), true);
+
+        $user->setRoles($roles);
+
+        $this->get('fos_user.user_manager')->updateUser($user);
     }
 
     /**
