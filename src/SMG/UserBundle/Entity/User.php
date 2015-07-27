@@ -5,6 +5,7 @@ namespace SMG\UserBundle\Entity;
 use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * SMG\UserBundle\Entity\User.
@@ -63,6 +64,14 @@ class User extends BaseUser implements AdvancedUserInterface
     public function getPhoneNumber()
     {
         return $this->phoneNumber;
+    }
+
+    /**
+     * @Serializer\VirtualProperty
+     */
+    public function getRoles()
+    {
+        return $this->roles;
     }
 
     public function setPhoneNumber($phoneNumber)
