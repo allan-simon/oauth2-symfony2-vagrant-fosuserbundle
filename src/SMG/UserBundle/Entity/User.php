@@ -67,9 +67,13 @@ class User extends BaseUser implements AdvancedUserInterface
     }
 
     /**
+     * TODO: problem on Symfony client side when use 
+     * an already declared function name, need to
+     * investigate why.
+     *
      * @Serializer\VirtualProperty
      */
-    public function getRoles()
+    public function getUserRoles()
     {
         return $this->roles;
     }
