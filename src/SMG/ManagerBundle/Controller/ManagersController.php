@@ -89,7 +89,8 @@ class ManagersController extends FOSRestController
 
         $errors = $this->validates(
             $updatedUser,
-            'backend_user_edit'
+            'backend_user_edit',
+            $user
         );
         if (count($errors) > 0) {
             return $this->handleView(
@@ -100,7 +101,6 @@ class ManagersController extends FOSRestController
         $user->setUsername($updatedUser->getUsername());
         $user->setEmail($updatedUser->getEmail());
         $user->setPhoneNumber($updatedUser->getPhoneNumber());
-        $user->setRoles($updatedUser->getRoles());
 
         $this->get('fos_user.user_manager')->updateUser($user);
 
