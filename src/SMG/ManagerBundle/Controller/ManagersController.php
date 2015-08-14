@@ -102,6 +102,7 @@ class ManagersController extends FOSRestController
         $user->setUsername($updatedUser->getUsername());
         $user->setEmail($updatedUser->getEmail());
         $user->setPhoneNumber($updatedUser->getPhoneNumber());
+        $user->setLastName($updatedUser->getLastName());
 
         $this->get('fos_user.user_manager')->updateUser($user);
 
