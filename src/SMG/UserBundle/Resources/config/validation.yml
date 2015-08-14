@@ -13,7 +13,7 @@ SMG\UserBundle\Entity\User:
             fields: usernameCanonical
             errorPath: username
             message: fos_user.username.already_used
-            groups: ['mobile_app_registration', 'backend_user_edit']
+            groups: ['mobile_app_registration', 'with_username']
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: phoneNumber
             message: bst.phonenumber.already_used
@@ -36,10 +36,10 @@ SMG\UserBundle\Entity\User:
                 minMessage: fos_user.username.short
                 max: 255
                 maxMessage: fos_user.username.long
-                groups: ['mobile_app_registration', 'backend_user_edit']
+                groups: ['mobile_app_registration', 'with_username']
             - NotBlank:
                 message: fos_user.username.blank
-                groups: ['mobile_app_registration', 'backend_user_edit']
+                groups: ['mobile_app_registration', 'with_username']
         phoneNumber:
             - Length:
                 min: 3

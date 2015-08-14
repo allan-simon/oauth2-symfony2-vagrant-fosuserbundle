@@ -215,6 +215,7 @@ echo '
     "username" : "USER_NAME",
     "plain_password" : "PLAIN_TEXT_PASSWORD",
     "phone_number": "123456789",
+    "last_name": "Test",
     "roles": ["ROLE_1", "ROLE_2"]
 }
 ' |  http POST http://127.0.0.1:8089/app_dev.php/admin/users 'Authorization:Bearer {accessToken}'
@@ -246,7 +247,7 @@ echo '
     "email": "TEST@EXAMPLE.COM" ,
     "username" : "USER_NAME",
     "phone_number" : "12345",
-    "roles": ["ROLE_1", "ROLE_2"]
+    "last_name": "Test"
 }
 ' |  http PUT http://127.0.0.1:8089/app_dev.php/admin/users/{id} 'Authorization:Bearer {accessToken}'
 ```
