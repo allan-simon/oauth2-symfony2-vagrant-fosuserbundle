@@ -45,6 +45,11 @@ class User extends BaseUser implements AdvancedUserInterface
      */
     protected $phoneNumber = null;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $lastName = null;
+
     public function __construct()
     {
         parent::__construct();
@@ -66,6 +71,11 @@ class User extends BaseUser implements AdvancedUserInterface
         return $this->phoneNumber;
     }
 
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
     /**
      * TODO: problem on Symfony client side when use 
      * an already declared function name, need to
@@ -81,6 +91,13 @@ class User extends BaseUser implements AdvancedUserInterface
     public function setPhoneNumber($phoneNumber)
     {
         $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
 
         return $this;
     }

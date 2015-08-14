@@ -55,6 +55,7 @@ class ManagersController extends FOSRestController
         }
 
         $newUser->setPhoneNumber($phoneNumber);
+        $newUser->setLastName($user->getLastName());
         $newUser->setEmail($user->getEmail());
         $newUser->setUsername($user->getUsername());
         $newUser->setPlainPassword($user->getPlainPassword());
