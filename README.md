@@ -357,6 +357,30 @@ Date: XXX
 Server: XXXX
 ```
 
+### PUT /admin/users/{id}/password - change password of a user
+
+One user connected through the backend client is allowed to change password of other users.
+
+```
+echo '
+{
+    "new_password" : "NEW_PASSWORD",
+}
+' |http PATCH http://127.0.0.1:8089/app_dev.php/admin/users/{id}/password 'Authorization:Bearer {accessToken}'
+```
+
+If everything is made correctly you should get back this
+
+```
+HTTP/1.1 204 No Content
+Cache-Control: no-cache
+Connection: Keep-Alive
+Content-Type: text/html
+Date: XXX
+Server: XXXX
+```
+
+
 ## Get an authorization token with grant type *password*
 
 run this HTTP request

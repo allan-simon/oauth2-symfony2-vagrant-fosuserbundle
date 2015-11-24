@@ -54,7 +54,6 @@ class UsersController extends FOSRestController
         $newUser->setPlainPassword($user->getPlainPassword());
         $newUser->setRoles(array('ROLE_USER'));
 
-
         if (is_null($token)) {
             $token = $this->generateToken();
         }

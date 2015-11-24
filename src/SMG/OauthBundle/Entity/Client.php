@@ -44,7 +44,7 @@ class Client extends BaseClient
      *
      * @param string $typeToCheck client type to check
      *
-     * @return boolean
+     * @return bool
      */
     public function isTypeEqualsTo($typeToCheck)
     {

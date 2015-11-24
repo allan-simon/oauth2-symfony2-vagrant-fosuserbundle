@@ -6,12 +6,12 @@ trait TokenFromHeaderTrait
 {
     /**
      * Extract the access token from the HTTP request header and
-     * format it from oauth2 format to return only the token string
+     * format it from oauth2 format to return only the token string.
      *
      * @return string access token
      */
-    public function getAccessTokenString() {
-
+    public function getAccessTokenString()
+    {
         $request = $this->getRequest();
         $headers = $request->headers->all();
 
@@ -28,7 +28,7 @@ trait TokenFromHeaderTrait
      *
      * @param string $allowedType client type to check
      *
-     * @return boolean
+     * @return bool
      *
      * @throws AccessDeniedException
      */
@@ -44,6 +44,21 @@ trait TokenFromHeaderTrait
                 'This user type is not allowed for this operation.'
             );
         }
+    }
+
+    /**
+     * get current by accessToken.
+     *
+     * @return User
+     */
+    public function getCurrentUser()
+    {
+        $accessToken = $this->getFOSOauthServer()->verifyAccessToken(
+            $this->getAccessTokenString(),
+            'user'
+        );
+
+        return $accessToken->getUser();
     }
 
     /**
