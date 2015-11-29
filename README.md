@@ -5,7 +5,7 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/allan-simon/oauth2-symfony2-vagrant-fosuserbundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/allan-simon/oauth2-symfony2-vagrant-fosuserbundle/?branch=master)
 [![Build Status](https://travis-ci.org/allan-simon/oauth2-symfony2-vagrant-fosuserbundle.svg?branch=master)](https://travis-ci.org/allan-simon/oauth2-symfony2-vagrant-fosuserbundle)
 
-It currently support PHP5.4 ad PHP5.5, for support of PHP5.6, we're waiting for Doctrine2.5 to be released
+It currently support PHP5.4, 5.5, 5.6  and even PHP7
 
 Please read and check this Readme from times to times so that
 to not waste time later wondering how to do things which are
