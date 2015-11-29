@@ -8,11 +8,11 @@ trait HandleUserTrait
      * Check if the information in $user is enough
      * and valid to create a new User in database.
      *
-     * @param User $user user to validate
+     * @param User   $user  user to validate
      * @param string $group validation group to apply
      *
      * @return array contains the error(s) list,
-     * empty if no error
+     *               empty if no error
      */
     private function validates($user, $group)
     {

@@ -6,12 +6,12 @@ trait TokenFromHeaderTrait
 {
     /**
      * Extract the access token from the HTTP request header and
-     * format it from oauth2 format to return only the token string
+     * format it from oauth2 format to return only the token string.
      *
      * @return string access token
      */
-    public function getAccessTokenString() {
-
+    public function getAccessTokenString()
+    {
         $request = $this->getRequest();
         $headers = $request->headers->all();
 
@@ -28,7 +28,7 @@ trait TokenFromHeaderTrait
      *
      * @param string $allowedType client type to check
      *
-     * @return boolean
+     * @return bool
      *
      * @throws AccessDeniedException
      */

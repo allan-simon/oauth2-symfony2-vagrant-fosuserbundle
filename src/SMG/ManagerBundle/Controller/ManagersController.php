@@ -2,7 +2,6 @@
 
 namespace SMG\ManagerBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\RestBundle\Controller\Annotations;
 use SMG\UserBundle\Entity\User;
 use FOS\RestBundle\View\View;
@@ -66,7 +65,7 @@ class ManagersController extends FOSRestController
         return $this->handleView(
             new View(
                 array(
-                    'id' => $newUser->getId()
+                    'id' => $newUser->getId(),
                 ),
                 Response::HTTP_CREATED
             )
@@ -107,7 +106,7 @@ class ManagersController extends FOSRestController
         return $this->handleView(
             new View(
                 array(
-                    'id' => $user->getId()
+                    'id' => $user->getId(),
                 ),
                 Response::HTTP_OK
             )
@@ -115,7 +114,7 @@ class ManagersController extends FOSRestController
     }
 
     /**
-     * @param User $user
+     * @param User    $user
      * @param Request $request
      */
     public function putUserRolesAction(
