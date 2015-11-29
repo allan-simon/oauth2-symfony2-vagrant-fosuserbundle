@@ -2,4 +2,4 @@
 - name: install application's dependencies via composer.phar
   sudo_user: vagrant
   shell: chdir={{ APPDIR }}
-    /vagrant/composer.phar install
+    /vagrant/composer.phar install --no-interaction
