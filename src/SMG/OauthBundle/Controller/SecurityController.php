@@ -26,17 +26,32 @@ class SecurityController extends Controller
                 $accessTokenString,
                 'user'
             );
+            $toSerialize = [];
+
             $user = $accessToken->getUser();
-            //TODO: replace by a serializer maybe?
-            return new JsonResponse(
-                [
+            if (!is_null($user)) {
+                $toSerialize = [
                     'id' => $user->getId(),
                     'email' => $user->getEmail(),
                     'phone_number' => $user->getPhoneNumber(),
                     'username' => $user->getUsername(),
                     'roles' => $user->getRoles(),
-                ]
-            );
+
+                ];
+            }
+
+            $client = $accessToken->getClient();
+
+            if (!is_null($client)) {
+                $toSerialize['client'] = [
+                    'id' => $client->getId(),
+                    'type' => $client->getType(),
+                    'meta' => $client->getMeta(),
+                ];
+            }
+
+            //TODO: replace by a serializer maybe?
+            return new JsonResponse($toSerialize);
         } catch (OAuth2AuthenticateException $e) {
             $response = new Response();
             $response->setStatusCode(Response::HTTP_GONE);

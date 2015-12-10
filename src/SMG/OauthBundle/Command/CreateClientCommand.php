@@ -34,11 +34,17 @@ class CreateClientCommand extends ContainerAwareCommand
                 InputOption::VALUE_OPTIONAL,
                 'Set type of client. Use this option to know from which client an user token comes from and assign privileges to this user.'
             )
+            ->addOption(
+                'meta',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Set meta information on the client, useful to put application specific information'
+            )
             ->setHelp(
                 <<<EOT
                     The <info>%command.name%</info>command creates a new client.
 
-<info>php %command.full_name% [--redirect-uri=...] [--grant-type=...] name</info>
+<info>php %command.full_name% [--redirect-uri=...] [--grant-type=...] [--meta=...] name</info>
 
 EOT
             );
@@ -51,6 +57,14 @@ EOT
         $client->setRedirectUris($input->getOption('redirect-uri'));
         $client->setAllowedGrantTypes($input->getOption('grant-type'));
         $client->setType($input->getOption('client-type'));
+
+        $metaStr = $input->getOption('meta');
+
+        if (!is_null($metaStr)) {
+            $meta = json_decode($metaStr, true);
+            $client->setMeta($meta);
+        }
+
         $clientManager->updateClient($client);
         $output->writeln(
             sprintf(

@@ -57,10 +57,12 @@ php app/console acme:oauth-server:client:create \
 --grant-type="password" \
 --grant-type="refresh_token" \
 --grant-type="token" \
---client-type="backend"
+--client-type="backend" \
+--meta='{"issued_to": "Umbrella corp" , "company_id": 42 }' \
 ```
 
-The `client-type` parameter is optional, the given value is used to specified the type of the client we create. This is a walk around as we cannot use the "scopes" feature provided by oauth2. In the bundle we use, this feature is not available from the client.
+  * The `client-type` parameter is optional, the given value is used to specified the type of the client we create. This is a walk around as we cannot use the "scopes" feature provided by oauth2. In the bundle we use, this feature is not available from the client.
+  * The `meta` parameter is also optional, it provides you with an easy to stuff somewhere you application specific data, without needing to fork this project
 
 it will return you:
 
@@ -415,6 +417,14 @@ example of successful request
         "ROLE_USER"
     ],
     "username": "vagrant"
+    "client" : {
+        "id": 2,
+        "type" : "backend",
+        "meta" : {
+            "issued_to" : "Umbrella Corp",
+            "company_id" : 42
+        }
+    }
 }
 
 ```

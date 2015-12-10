@@ -22,6 +22,11 @@ class Client extends BaseClient
      */
     public $type;
 
+    /**
+     * @ORM\Column(type="json_array", nullable=true)
+     */
+    public $meta;
+
     public function __construct()
     {
         parent::__construct();
@@ -37,6 +42,18 @@ class Client extends BaseClient
     public function getType()
     {
         return $this->type;
+    }
+
+    public function setMeta($meta)
+    {
+        $this->meta = $meta;
+
+        return $this;
+    }
+
+    public function getMeta()
+    {
+        return $this->meta;
     }
 
     /**

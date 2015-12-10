@@ -8,12 +8,16 @@ trait TokenFromHeaderTrait
      * Extract the access token from the HTTP request header and
      * format it from oauth2 format to return only the token string.
      *
-     * @return string access token
+     * @return string|null access token
      */
     public function getAccessTokenString()
     {
         $request = $this->getRequest();
         $headers = $request->headers->all();
+
+        if (!isset($headers['authorization'])) {
+            return;
+        }
 
         return str_replace(
             'Bearer ',
@@ -34,14 +38,21 @@ trait TokenFromHeaderTrait
      */
     public function throwIfClientNot($allowedType)
     {
+        $accessTokenStr = $this->getAccessTokenString();
+        if (is_null($accessTokenStr)) {
+            throw $this->createAccessDeniedException(
+                'Access token missing'
+            );
+        }
+
         $accessToken = $this->getFOSOauthServer()->verifyAccessToken(
-            $this->getAccessTokenString(),
+            $accessTokenStr,
             'user'
         );
 
         if (!$accessToken->getClient()->isTypeEqualsTo($allowedType)) {
             throw $this->createAccessDeniedException(
-                'This user type is not allowed for this operation.'
+                'This client type is not allowed for this operation.'
             );
         }
     }
