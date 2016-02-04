@@ -15,7 +15,10 @@ trait TokenFromHeaderTrait
         $request = $this->getRequest();
         $headers = $request->headers->all();
 
-        if (!isset($headers['authorization'])) {
+        if (
+            !isset($headers['authorization']) ||
+            empty($headers['authorization'][0])
+        ) {
             return;
         }
 

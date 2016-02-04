@@ -50,6 +50,7 @@ php app/console  doctrine:migrations:migrate
 
 ## Create a client
 
+### Through the console (required first time)
 in the vagrant machine (in directory `/vagrant` ) run: (in case you want to use the grant type `password`)
 
 ```
@@ -69,6 +70,18 @@ it will return you:
 ```
 Added a new client with public id CLIENT_ID, secret CLIENT_SECRET
 ```
+
+### Through an API call
+
+```
+echo '{
+    "type": "game",
+    "meta" : { "game_id" : 1 },
+    "allowed_grant_types" : ["client_credentials"]
+}
+' |  http POST http://127.0.0.1:8089/app_dev.php/admin/clients
+```
+
 
 ## Create a new end user
 

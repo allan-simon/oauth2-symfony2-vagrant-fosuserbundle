@@ -109,6 +109,9 @@ jms_serializer:
             FOSUserBundle:
                 path: '%kernel.root_dir%/Resources/FOSUserBundle/serializer'
                 namespace_prefix: 'FOS\UserBundle'
+            FOSOAuthServerBundle:
+                path: '%kernel.root_dir%/Resources/FOSOAuthServerBundle/serializer'
+                namespace_prefix: 'FOS\OAuthServerBundle'
 
 
 cspoo_sms:

@@ -1,0 +1,4 @@
+FOS\OAuthServerBundle\Model\Client:
+    properties:
+        allowedGrantTypes:
+            type: array

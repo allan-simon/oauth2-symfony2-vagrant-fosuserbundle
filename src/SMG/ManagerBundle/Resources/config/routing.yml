@@ -1,4 +1,9 @@
-managers:
+manager_users:
     resource: SMG\ManagerBundle\Controller\ManagersController
     type:     rest
-    name_prefix: admin_
+    name_prefix: admin_users_
+
+manager_clients:
+    resource: SMG\ManagerBundle\Controller\ClientsController
+    type:     rest
+    name_prefix: admin_clients_

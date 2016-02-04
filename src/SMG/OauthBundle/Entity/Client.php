@@ -4,6 +4,7 @@ namespace SMG\OauthBundle\Entity;
 
 use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity
@@ -18,7 +19,7 @@ class Client extends BaseClient
     protected $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     public $type;
 
@@ -26,6 +27,17 @@ class Client extends BaseClient
      * @ORM\Column(type="json_array", nullable=true)
      */
     public $meta;
+
+    /**
+     * @Serializer\VirtualProperty
+     * @Serializer\SerializedName("client_id")
+     *
+     * @return string
+     */
+    public function getClientId()
+    {
+        return $this->getPublicId();
+    }
 
     public function __construct()
     {
