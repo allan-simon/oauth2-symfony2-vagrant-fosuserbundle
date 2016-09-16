@@ -9,6 +9,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ManagersController extends FOSRestController
 {
@@ -164,5 +165,80 @@ class ManagersController extends FOSRestController
         $user->setEnabled(true);
 
         $this->get('fos_user.user_manager')->updateUser($user);
+    }
+
+    /**
+     * @param User    $user
+     * @param Request $request
+     *
+     * @Annotations\put("/users/{id}/password")
+     *
+     * @return Response
+     */
+    public function putUsersPasswordAction(User $user, Request $request)
+    {
+        $this->throwIfClientNot('backend');
+
+        if (!$this->isCurrentUserAdmin()) {
+            return $this->handleView(
+                new View(
+                    ['message' => 'bst.admin.only'],
+                    Response::HTTP_FORBIDDEN
+                )
+            );
+        }
+
+        $requestData = $this->requestIsJsonWithKeysOrThrow(
+            $request,
+            ['new_password']
+        );
+
+        $user->setPlainPassword($requestData['new_password']);
+
+        $this->get('fos_user.user_manager')->updateUser($user);
+
+        return $this->handleView(
+            new View(
+                null,
+                Response::HTTP_NO_CONTENT
+            )
+        );
+    }
+
+    /**
+     * Check if the JSON sent data is correct
+     * for the current called action
+     * and throws a bad request exception if the input is wrong.
+     *
+     * @param Request $request
+     * @param array   $keys
+     * @param string  $message
+     *
+     * @return array
+     *
+     * @throws BadRequestHttpException
+     */
+    private function requestIsJsonWithKeysOrThrow(
+        Request $request,
+        array $keys,
+        $message = 'bst.json.field_missing'
+    ) {
+        $json = json_decode($request->getContent(), true);
+
+        foreach ($keys as $key) {
+            if (empty($json[$key])) {
+                throw new BadRequestHttpException($message);
+            }
+        }
+
+        return $json;
+    }
+
+    private function isCurrentUserAdmin()
+    {
+        return in_array(
+            'ROLE_ADMINPANEL',
+            $this->getCurrentUser()->getRoles()
+        );
     }
 }

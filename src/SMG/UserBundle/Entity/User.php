@@ -67,7 +67,7 @@ class User extends BaseUser implements AdvancedUserInterface
     }
 
     /**
-     * TODO: problem on Symfony client side when use 
+     * TODO: problem on Symfony client side when use
      * an already declared function name, need to
      * investigate why.
      *

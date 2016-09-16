@@ -48,9 +48,21 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
 
         $this->addReference('user-with-confirmation-token', $u3);
 
+        $u4 = new User();
+        $u4->setUsername('admin');
+        $u4->setEmail('admin@example.com');
+        $u4->setPlainPassword('admin');
+        $u4->setRoles(['ROLE_ADMINPANEL']);
+        $u4->setConfirmationToken('123456');
+        $u4->setEnabled(true);
+        $u4->setLocked(false);
+
+        $this->addReference('admin', $u4);
+
         $objectManager->persist($u1);
         $objectManager->persist($u2);
         $objectManager->persist($u3);
+        $objectManager->persist($u4);
         $objectManager->flush();
     }
 

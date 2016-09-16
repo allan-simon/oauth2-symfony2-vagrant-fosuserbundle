@@ -61,6 +61,21 @@ trait TokenFromHeaderTrait
     }
 
     /**
+     * get current by accessToken.
+     *
+     * @return User
+     */
+    public function getCurrentUser()
+    {
+        $accessToken = $this->getFOSOauthServer()->verifyAccessToken(
+            $this->getAccessTokenString(),
+            'user'
+        );
+
+        return $accessToken->getUser();
+    }
+
+    /**
      *
      */
     private function getFOSOauthServer()
